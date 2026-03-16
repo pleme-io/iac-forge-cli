@@ -2079,11 +2079,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1773673207,
-        "narHash": "sha256-N7KjS0RgSxEQzapc21KkPsOhWF+j5VxoFmI94wV2JTU=",
+        "lastModified": 1773675642,
+        "narHash": "sha256-e8dVoxD0J1Fua9NpAdBWjntfvuTjNKdQT+YrrmpcUDQ=",
         "owner": "pleme-io",
         "repo": "tend",
-        "rev": "fbeeca71659ddfa7eb068dbf5f2f09a74c2b3d02",
+        "rev": "a00ff999934f5f4d60b2a2bc4f8862ddc758ed6a",
         "type": "github"
       },
       "original": {
