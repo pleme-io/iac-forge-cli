@@ -7,6 +7,10 @@
       url = "github:pleme-io/substrate";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    crate2nix = {
+      url = "github:nix-community/crate2nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -14,11 +18,15 @@
       self,
       nixpkgs,
       substrate,
+      crate2nix,
       ...
     }:
     let
       system = "aarch64-darwin";
-      pkgs = import nixpkgs { inherit system; };
+      pkgs = import nixpkgs {
+        inherit system;
+        overlays = [ substrate.rustOverlays.${system}.rust ];
+      };
 
       props = builtins.fromTOML (builtins.readFile ./Cargo.toml);
       version = props.package.version;
@@ -55,14 +63,15 @@
         iac-forge-cli = self.packages.${final.system}.default;
       };
 
-      devShells.${system}.default = pkgs.mkShellNoCC {
-        packages = [
-          pkgs.rustc
-          pkgs.cargo
+      devShells.${system}.default = pkgs.mkShell {
+        buildInputs = [
+          pkgs.fenixRustToolchain
           pkgs.rust-analyzer
-          pkgs.clippy
-          pkgs.rustfmt
+          pkgs.cargo-watch
+          pkgs.cargo-edit
+          crate2nix.packages.${system}.default
         ];
+        RUST_SRC_PATH = "${pkgs.fenixRustToolchain}/lib/rustlib/src/rust/library";
       };
 
       apps.${system} = {
@@ -98,10 +107,17 @@
           NEW="$MAJOR.$MINOR.$PATCH"
           sed -i "" "s/^version = \"$CURRENT\"/version = \"$NEW\"/" Cargo.toml
           cargo check 2>/dev/null || true
-          git add Cargo.toml Cargo.lock
+          ${crate2nix.packages.${system}.default}/bin/crate2nix generate
+          git add Cargo.toml Cargo.lock Cargo.nix
           git commit -m "bump: v$NEW"
           git tag "v$NEW"
           echo "bumped: v$CURRENT → v$NEW"
+        '';
+        regenerate = mkApp "regenerate" ''
+          set -euo pipefail
+          echo "Regenerating Cargo.nix..."
+          ${crate2nix.packages.${system}.default}/bin/crate2nix generate
+          echo "Cargo.nix regenerated."
         '';
         release = mkApp "release" ''
           set -euo pipefail
