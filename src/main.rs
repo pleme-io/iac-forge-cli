@@ -14,6 +14,7 @@ pub enum BackendChoice {
     Pulumi,
     Crossplane,
     Ansible,
+    Pangea,
     All,
 }
 
@@ -24,6 +25,7 @@ impl std::fmt::Display for BackendChoice {
             Self::Pulumi => write!(f, "pulumi"),
             Self::Crossplane => write!(f, "crossplane"),
             Self::Ansible => write!(f, "ansible"),
+            Self::Pangea => write!(f, "pangea"),
             Self::All => write!(f, "all"),
         }
     }
@@ -38,6 +40,7 @@ impl std::str::FromStr for BackendChoice {
             "pulumi" => Ok(Self::Pulumi),
             "crossplane" => Ok(Self::Crossplane),
             "ansible" => Ok(Self::Ansible),
+            "pangea" => Ok(Self::Pangea),
             "all" => Ok(Self::All),
             other => Err(format!("unknown backend: {other}")),
         }

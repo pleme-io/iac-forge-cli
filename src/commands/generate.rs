@@ -89,12 +89,14 @@ pub fn run(
         BackendChoice::Pulumi => vec![BackendChoice::Pulumi],
         BackendChoice::Crossplane => vec![BackendChoice::Crossplane],
         BackendChoice::Ansible => vec![BackendChoice::Ansible],
+        BackendChoice::Pangea => vec![BackendChoice::Pangea],
         BackendChoice::All => {
             let mut v = Vec::new();
             v.push(BackendChoice::Terraform);
             v.push(BackendChoice::Pulumi);
             v.push(BackendChoice::Crossplane);
             v.push(BackendChoice::Ansible);
+            v.push(BackendChoice::Pangea);
             v
         }
     };
@@ -204,6 +206,23 @@ fn generate_for_backend(
             {
                 let _ = (api, provider_spec, iac_provider, iac_resources, resource_files, output_dir);
                 Err("ansible backend not yet available — ansible-forge crate pending".into())
+            }
+        }
+        BackendChoice::Pangea => {
+            #[cfg(feature = "pangea")]
+            {
+                let _ = (api, provider_spec, resource_files);
+                generate_via_backend(
+                    &pangea_forge::PangeaBackend,
+                    iac_provider,
+                    iac_resources,
+                    output_dir,
+                )
+            }
+            #[cfg(not(feature = "pangea"))]
+            {
+                let _ = (api, provider_spec, iac_provider, iac_resources, resource_files, output_dir);
+                Err("pangea backend not yet available — pangea-forge crate pending".into())
             }
         }
         BackendChoice::All => unreachable!("All is expanded before calling this function"),
@@ -403,6 +422,7 @@ mod tests {
         assert_eq!(BackendChoice::Pulumi.to_string(), "pulumi");
         assert_eq!(BackendChoice::Crossplane.to_string(), "crossplane");
         assert_eq!(BackendChoice::Ansible.to_string(), "ansible");
+        assert_eq!(BackendChoice::Pangea.to_string(), "pangea");
         assert_eq!(BackendChoice::All.to_string(), "all");
     }
 
@@ -415,15 +435,17 @@ mod tests {
                 v.push(BackendChoice::Pulumi);
                 v.push(BackendChoice::Crossplane);
                 v.push(BackendChoice::Ansible);
+                v.push(BackendChoice::Pangea);
                 v
             }
             _ => unreachable!(),
         };
-        assert_eq!(all_backends.len(), 4);
+        assert_eq!(all_backends.len(), 5);
         assert!(all_backends.iter().any(|b| matches!(b, BackendChoice::Terraform)));
         assert!(all_backends.iter().any(|b| matches!(b, BackendChoice::Pulumi)));
         assert!(all_backends.iter().any(|b| matches!(b, BackendChoice::Crossplane)));
         assert!(all_backends.iter().any(|b| matches!(b, BackendChoice::Ansible)));
+        assert!(all_backends.iter().any(|b| matches!(b, BackendChoice::Pangea)));
     }
 
     #[test]

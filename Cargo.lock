@@ -295,6 +295,7 @@ dependencies = [
  "glob",
  "iac-forge",
  "openapi-forge",
+ "pangea-forge",
  "pulumi-forge",
  "serde",
  "serde_json",
@@ -428,6 +429,16 @@ dependencies = [
  "serde_json",
  "serde_yaml",
  "thiserror",
+]
+
+[[package]]
+name = "pangea-forge"
+version = "0.1.0"
+source = "git+https://github.com/pleme-io/pangea-forge#b98d0c1a57badd772ff23543574f9608fe449451"
+dependencies = [
+ "iac-forge",
+ "serde",
+ "serde_json",
 ]
 
 [[package]]
