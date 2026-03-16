@@ -32,6 +32,8 @@ Feature-gated via Cargo features:
 - `pulumi` — `schema.json` via `pulumi-forge`
 - `crossplane` — CRD YAML via `crossplane-forge`
 - `ansible` — Python modules via `ansible-forge`
+- `pangea` — Ruby DSL via `pangea-forge`
+- `steampipe` — Go Steampipe plugin tables via `steampipe-forge`
 
 ## Sync Command
 
