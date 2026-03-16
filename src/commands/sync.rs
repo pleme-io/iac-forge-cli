@@ -1,10 +1,29 @@
 use std::collections::HashSet;
+use std::fs::OpenOptions;
+use std::io::Write as _;
 use std::path::Path;
 
 use colored::Colorize;
 use openapi_forge::Spec;
 
 use crate::BackendChoice;
+
+/// Append a JSON audit event to a JSONL file.
+fn audit_log(path: &Path, event: &str, data: serde_json::Value) {
+    let entry = serde_json::json!({
+        "timestamp": chrono::Utc::now().to_rfc3339(),
+        "event": event,
+        "data": data,
+    });
+    if let Ok(line) = serde_json::to_string(&entry) {
+        if let Some(parent) = path.parent() {
+            std::fs::create_dir_all(parent).ok();
+        }
+        if let Ok(mut file) = OpenOptions::new().create(true).append(true).open(path) {
+            let _ = writeln!(file, "{line}");
+        }
+    }
+}
 
 /// Run the full API evolution pipeline: diff, drift, scaffold, validate, generate.
 ///
@@ -21,6 +40,21 @@ pub fn run(
     provider_path: Option<&Path>,
     auto_scaffold: bool,
     backend: &str,
+) -> Result<(), Box<dyn std::error::Error>> {
+    run_with_audit(old_spec_path, new_spec_path, resources_dir, output_dir, provider_path, auto_scaffold, backend, None)
+}
+
+/// Run sync with optional audit log output.
+#[allow(clippy::too_many_arguments)]
+pub fn run_with_audit(
+    old_spec_path: &Path,
+    new_spec_path: &Path,
+    resources_dir: &Path,
+    output_dir: &Path,
+    provider_path: Option<&Path>,
+    auto_scaffold: bool,
+    backend: &str,
+    audit_path: Option<&Path>,
 ) -> Result<(), Box<dyn std::error::Error>> {
     // Step 1: Diff
     println!(
@@ -145,6 +179,22 @@ pub fn run(
     println!("  Endpoints: +{} -{}", added.len(), removed.len());
     println!("  Schemas:   +{added_schemas} -{removed_schemas}");
     println!("  Generated: {file_count} file(s)");
+
+    if let Some(audit) = audit_path {
+        audit_log(audit, "sync_complete", serde_json::json!({
+            "old_spec": old_spec_path.display().to_string(),
+            "new_spec": new_spec_path.display().to_string(),
+            "endpoints_added": added.len(),
+            "endpoints_removed": removed.len(),
+            "schemas_added": added_schemas,
+            "schemas_removed": removed_schemas,
+            "added_endpoints": sorted_added,
+            "removed_endpoints": sorted_removed,
+            "backend": backend,
+            "files_generated": file_count,
+            "auto_scaffold": auto_scaffold,
+        }));
+    }
 
     Ok(())
 }

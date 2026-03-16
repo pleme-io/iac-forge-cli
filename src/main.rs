@@ -157,6 +157,10 @@ enum Commands {
         /// Backend to generate (terraform, pulumi, crossplane, ansible, all)
         #[arg(long, default_value = "all")]
         backend: String,
+
+        /// Path to structured JSON audit log (JSONL). Events appended for traceability.
+        #[arg(long)]
+        audit_log: Option<PathBuf>,
     },
 }
 
@@ -187,7 +191,8 @@ fn main() {
             provider,
             auto_scaffold,
             backend,
-        } => commands::sync::run(
+            audit_log,
+        } => commands::sync::run_with_audit(
             &spec_old,
             &spec_new,
             &resources,
@@ -195,6 +200,7 @@ fn main() {
             provider.as_deref(),
             auto_scaffold,
             &backend,
+            audit_log.as_deref(),
         ),
     };
 

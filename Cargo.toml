@@ -32,6 +32,7 @@ terraform-forge = { git = "https://github.com/pleme-io/terraform-forge", optiona
 pulumi-forge = { git = "https://github.com/pleme-io/pulumi-forge", optional = true }
 crossplane-forge = { git = "https://github.com/pleme-io/crossplane-forge", optional = true }
 ansible-forge = { git = "https://github.com/pleme-io/ansible-forge", optional = true }
+chrono = "0.4"
 clap = { version = "4", features = ["derive"] }
 colored = "3"
 serde = { version = "1", features = ["derive"] }
