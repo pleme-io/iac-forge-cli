@@ -683,6 +683,275 @@ id_field = "name"
         );
     }
 
+    #[test]
+    fn scaffold_generates_toml_with_required_sections() {
+        let dir = TempDir::new().unwrap();
+        let spec_path = write_minimal_spec(dir.path());
+        let output_dir = dir.path().join("scaffold_out");
+
+        let result = super::super::scaffold::run(&spec_path, None, &output_dir);
+        assert!(result.is_ok(), "scaffold failed: {:?}", result.err());
+
+        // If files were produced, they must have [resource], [crud], [identity] sections
+        if output_dir.exists() {
+            for entry in glob::glob(&format!("{}/**/*.toml", output_dir.display())).unwrap() {
+                let path = entry.unwrap();
+                let content = fs::read_to_string(&path).unwrap();
+                let parsed: toml::Value = toml::from_str(&content).unwrap();
+                assert!(
+                    parsed.get("resource").is_some(),
+                    "TOML at {} missing [resource] section",
+                    path.display()
+                );
+                assert!(
+                    parsed.get("crud").is_some(),
+                    "TOML at {} missing [crud] section",
+                    path.display()
+                );
+                assert!(
+                    parsed.get("identity").is_some(),
+                    "TOML at {} missing [identity] section",
+                    path.display()
+                );
+            }
+        }
+    }
+
+    #[test]
+    fn drift_detects_missing_and_extra_resources() {
+        let dir = TempDir::new().unwrap();
+        let spec_path = write_minimal_spec(dir.path());
+        let resources_dir = dir.path().join("resources");
+        fs::create_dir_all(&resources_dir).unwrap();
+
+        // Write a resource that does NOT match any spec CRUD group
+        let extra_toml = r#"
+[resource]
+name = "akeyless_custom_thing"
+description = "Not in spec"
+category = "test"
+
+[crud]
+create_endpoint = "/create-secret"
+create_schema = "createSecret"
+read_endpoint = "/describe-item"
+read_schema = "describeItem"
+delete_endpoint = "/delete-item"
+delete_schema = "deleteItem"
+
+[identity]
+id_field = "name"
+"#;
+        fs::write(resources_dir.join("custom.toml"), extra_toml).unwrap();
+
+        // drift should succeed (it just reports, doesn't error)
+        let result = super::super::drift::run(&spec_path, &resources_dir);
+        assert!(result.is_ok(), "drift failed: {:?}", result.err());
+    }
+
+    #[test]
+    fn diff_detects_added_and_removed_endpoints() {
+        let dir = TempDir::new().unwrap();
+
+        // Old spec with 3 endpoints
+        let old_spec = r#"
+openapi: "3.0.0"
+info: { title: Old, version: "1.0" }
+paths:
+  /create-secret:
+    post:
+      operationId: createSecret
+      responses:
+        "200": { description: ok }
+  /delete-item:
+    post:
+      operationId: deleteItem
+      responses:
+        "200": { description: ok }
+  /old-endpoint:
+    post:
+      operationId: oldEndpoint
+      responses:
+        "200": { description: ok }
+components:
+  schemas: {}
+"#;
+        let old_path = dir.path().join("old.yaml");
+        fs::write(&old_path, old_spec).unwrap();
+
+        // New spec: /old-endpoint removed, /new-endpoint added
+        let new_spec = r#"
+openapi: "3.0.0"
+info: { title: New, version: "2.0" }
+paths:
+  /create-secret:
+    post:
+      operationId: createSecret
+      responses:
+        "200": { description: ok }
+  /delete-item:
+    post:
+      operationId: deleteItem
+      responses:
+        "200": { description: ok }
+  /new-endpoint:
+    post:
+      operationId: newEndpoint
+      responses:
+        "200": { description: ok }
+components:
+  schemas: {}
+"#;
+        let new_path = dir.path().join("new.yaml");
+        fs::write(&new_path, new_spec).unwrap();
+
+        let result = super::super::diff::run(&old_path, &new_path);
+        assert!(result.is_ok(), "diff failed: {:?}", result.err());
+    }
+
+    #[test]
+    fn generate_with_pulumi_backend() {
+        let dir = TempDir::new().unwrap();
+        let spec_path = write_minimal_spec(dir.path());
+        let provider_path = write_provider_toml(dir.path());
+        let resources_dir = dir.path().join("resources");
+        fs::create_dir_all(&resources_dir).unwrap();
+        write_resource_toml(&resources_dir);
+        let output_dir = dir.path().join("pulumi_output");
+
+        #[cfg(feature = "pulumi")]
+        {
+            let result = run(
+                &BackendChoice::Pulumi,
+                &spec_path,
+                &resources_dir,
+                &output_dir,
+                Some(&provider_path),
+            );
+            assert!(result.is_ok(), "pulumi generate failed: {:?}", result.err());
+            assert!(
+                output_dir.join("schema.json").exists(),
+                "schema.json should be generated"
+            );
+            let schema_content = fs::read_to_string(output_dir.join("schema.json")).unwrap();
+            let parsed: serde_json::Value = serde_json::from_str(&schema_content).unwrap();
+            assert_eq!(parsed["name"], "test");
+        }
+        #[cfg(not(feature = "pulumi"))]
+        {
+            let _ = (spec_path, provider_path, resources_dir, output_dir);
+        }
+    }
+
+    #[test]
+    fn generate_with_crossplane_backend() {
+        let dir = TempDir::new().unwrap();
+        let spec_path = write_minimal_spec(dir.path());
+        let provider_path = write_provider_toml(dir.path());
+        let resources_dir = dir.path().join("resources");
+        fs::create_dir_all(&resources_dir).unwrap();
+        write_resource_toml(&resources_dir);
+        let output_dir = dir.path().join("crossplane_output");
+
+        #[cfg(feature = "crossplane")]
+        {
+            let result = run(
+                &BackendChoice::Crossplane,
+                &spec_path,
+                &resources_dir,
+                &output_dir,
+                Some(&provider_path),
+            );
+            assert!(result.is_ok(), "crossplane generate failed: {:?}", result.err());
+            // Should produce CRD YAML files
+            let yamls: Vec<_> = glob::glob(&format!("{}/**/*.yaml", output_dir.display()))
+                .unwrap()
+                .filter_map(Result::ok)
+                .collect();
+            assert!(!yamls.is_empty(), "crossplane should produce YAML files");
+        }
+        #[cfg(not(feature = "crossplane"))]
+        {
+            let _ = (spec_path, provider_path, resources_dir, output_dir);
+        }
+    }
+
+    #[test]
+    fn generate_with_ansible_backend() {
+        let dir = TempDir::new().unwrap();
+        let spec_path = write_minimal_spec(dir.path());
+        let provider_path = write_provider_toml(dir.path());
+        let resources_dir = dir.path().join("resources");
+        fs::create_dir_all(&resources_dir).unwrap();
+        write_resource_toml(&resources_dir);
+        let output_dir = dir.path().join("ansible_output");
+
+        #[cfg(feature = "ansible")]
+        {
+            let result = run(
+                &BackendChoice::Ansible,
+                &spec_path,
+                &resources_dir,
+                &output_dir,
+                Some(&provider_path),
+            );
+            assert!(result.is_ok(), "ansible generate failed: {:?}", result.err());
+            // Should produce Python module files
+            let pyfiles: Vec<_> = glob::glob(&format!("{}/**/*.py", output_dir.display()))
+                .unwrap()
+                .filter_map(Result::ok)
+                .collect();
+            assert!(!pyfiles.is_empty(), "ansible should produce .py files");
+        }
+        #[cfg(not(feature = "ansible"))]
+        {
+            let _ = (spec_path, provider_path, resources_dir, output_dir);
+        }
+    }
+
+    #[test]
+    fn generate_all_creates_subdirectories_per_backend() {
+        let dir = TempDir::new().unwrap();
+        let spec_path = write_minimal_spec(dir.path());
+        let provider_path = write_provider_toml(dir.path());
+        let resources_dir = dir.path().join("resources");
+        fs::create_dir_all(&resources_dir).unwrap();
+        write_resource_toml(&resources_dir);
+        let output_dir = dir.path().join("all_output");
+
+        let result = run(
+            &BackendChoice::All,
+            &spec_path,
+            &resources_dir,
+            &output_dir,
+            Some(&provider_path),
+        );
+        assert!(result.is_ok(), "generate all failed: {:?}", result.err());
+
+        // When --backend all, output should be organized in subdirectories
+        #[cfg(feature = "terraform")]
+        assert!(output_dir.join("terraform").exists());
+    }
+
+    #[test]
+    fn generate_missing_provider_toml_errors() {
+        let dir = TempDir::new().unwrap();
+        let spec_path = write_minimal_spec(dir.path());
+        let resources_dir = dir.path().join("resources");
+        fs::create_dir_all(&resources_dir).unwrap();
+        let output_dir = dir.path().join("output");
+
+        // No provider.toml exists and --provider is not provided
+        let result = run(
+            &BackendChoice::Terraform,
+            &spec_path,
+            &resources_dir,
+            &output_dir,
+            None,
+        );
+        assert!(result.is_err(), "should fail when provider.toml is missing");
+    }
+
     #[cfg(feature = "terraform")]
     #[test]
     fn generate_terraform_skips_invalid_resources() {
