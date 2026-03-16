@@ -25,6 +25,7 @@ pulumi = ["dep:pulumi-forge"]
 crossplane = ["dep:crossplane-forge"]
 ansible = ["dep:ansible-forge"]
 pangea = ["dep:pangea-forge"]
+steampipe = ["dep:steampipe-forge"]
 
 [dependencies]
 openapi-forge = { git = "https://github.com/pleme-io/openapi-forge" }
@@ -34,6 +35,7 @@ pulumi-forge = { git = "https://github.com/pleme-io/pulumi-forge", optional = tr
 crossplane-forge = { git = "https://github.com/pleme-io/crossplane-forge", optional = true }
 ansible-forge = { git = "https://github.com/pleme-io/ansible-forge", optional = true }
 pangea-forge = { git = "https://github.com/pleme-io/pangea-forge", optional = true }
+steampipe-forge = { git = "https://github.com/pleme-io/steampipe-forge", optional = true }
 chrono = "0.4"
 clap = { version = "4", features = ["derive"] }
 colored = "3"
