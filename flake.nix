@@ -45,7 +45,16 @@
         src = devPkgs.lib.cleanSource ./.;
         cargoLock = {
           lockFile = ./Cargo.lock;
-          outputHashes = { };
+          outputHashes = {
+            "openapi-forge-0.1.0" = "sha256-lo2ITSu8hb1cYsvfLTqPRyFbcsIflRb0GBuFvKi3AZY=";
+            "iac-forge-0.1.0" = "sha256-Mlkhi+A9JTw3JHA9lCjq3qxvW757SRo8mUyH+PzQsmE=";
+            "terraform-forge-0.1.0" = "sha256-ih7UQA70Tc0emDPr9DVuUp1g69O1BT4pBZO2o07kS48=";
+            "pulumi-forge-0.1.0" = "sha256-SnIRIEbdyoNGDvrI0RnPHQ8sLh27JDfcN3e6E9RWl+w=";
+            "crossplane-forge-0.1.0" = "sha256-1A0cGOZX+BEJ+JxU+hNGN+eGDbbGZDIrR+KCy0GDuFs=";
+            "ansible-forge-0.1.0" = "sha256-x2rx4V9QvYUQ6TzTvZtn2iDjoxZnPQzxIr6AX3QUrss=";
+            "pangea-forge-0.1.0" = "sha256-asE0dzClPjWNueeAFO1RQ/iFA8BqQkHzs+fS3y8VW68=";
+            "steampipe-forge-0.1.0" = "sha256-KoqfOXuSdFN4tjydbog2Pq1kR0j7NAO3Sp7T1qZZ0Go=";
+          };
         };
         doCheck = true;
         meta = {
@@ -74,7 +83,16 @@
           src = pkgs.lib.cleanSource ./.;
           cargoLock = {
             lockFile = ./Cargo.lock;
-            outputHashes = { };
+            outputHashes = {
+              "openapi-forge-0.1.0" = "sha256-lo2ITSu8hb1cYsvfLTqPRyFbcsIflRb0GBuFvKi3AZY=";
+              "iac-forge-0.1.0" = "sha256-Mlkhi+A9JTw3JHA9lCjq3qxvW757SRo8mUyH+PzQsmE=";
+              "terraform-forge-0.1.0" = "sha256-ih7UQA70Tc0emDPr9DVuUp1g69O1BT4pBZO2o07kS48=";
+              "pulumi-forge-0.1.0" = "sha256-SnIRIEbdyoNGDvrI0RnPHQ8sLh27JDfcN3e6E9RWl+w=";
+              "crossplane-forge-0.1.0" = "sha256-1A0cGOZX+BEJ+JxU+hNGN+eGDbbGZDIrR+KCy0GDuFs=";
+              "ansible-forge-0.1.0" = "sha256-x2rx4V9QvYUQ6TzTvZtn2iDjoxZnPQzxIr6AX3QUrss=";
+              "pangea-forge-0.1.0" = "sha256-asE0dzClPjWNueeAFO1RQ/iFA8BqQkHzs+fS3y8VW68=";
+              "steampipe-forge-0.1.0" = "sha256-KoqfOXuSdFN4tjydbog2Pq1kR0j7NAO3Sp7T1qZZ0Go=";
+            };
           };
           doCheck = false;
           meta = {
