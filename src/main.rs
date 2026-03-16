@@ -29,6 +29,21 @@ impl std::fmt::Display for BackendChoice {
     }
 }
 
+impl std::str::FromStr for BackendChoice {
+    type Err = String;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s.to_lowercase().as_str() {
+            "terraform" => Ok(Self::Terraform),
+            "pulumi" => Ok(Self::Pulumi),
+            "crossplane" => Ok(Self::Crossplane),
+            "ansible" => Ok(Self::Ansible),
+            "all" => Ok(Self::All),
+            other => Err(format!("unknown backend: {other}")),
+        }
+    }
+}
+
 #[derive(Parser)]
 #[command(
     name = "iac-forge",
@@ -112,6 +127,37 @@ enum Commands {
         #[arg(long)]
         new: PathBuf,
     },
+
+    /// Sync resources across API version change (diff + scaffold + generate)
+    Sync {
+        /// Path to old OpenAPI spec
+        #[arg(long)]
+        spec_old: PathBuf,
+
+        /// Path to new OpenAPI spec
+        #[arg(long)]
+        spec_new: PathBuf,
+
+        /// Directory containing resource TOML specs
+        #[arg(long)]
+        resources: PathBuf,
+
+        /// Output directory for generated files
+        #[arg(long)]
+        output: PathBuf,
+
+        /// Path to provider.toml
+        #[arg(long)]
+        provider: Option<PathBuf>,
+
+        /// Auto-scaffold new resources found in diff
+        #[arg(long, default_value = "false")]
+        auto_scaffold: bool,
+
+        /// Backend to generate (terraform, pulumi, crossplane, ansible, all)
+        #[arg(long, default_value = "all")]
+        backend: String,
+    },
 }
 
 fn main() {
@@ -133,6 +179,23 @@ fn main() {
         Commands::Drift { spec, resources } => commands::drift::run(&spec, &resources),
         Commands::Validate { spec, resources } => commands::validate::run(&spec, &resources),
         Commands::Diff { old, new } => commands::diff::run(&old, &new),
+        Commands::Sync {
+            spec_old,
+            spec_new,
+            resources,
+            output,
+            provider,
+            auto_scaffold,
+            backend,
+        } => commands::sync::run(
+            &spec_old,
+            &spec_new,
+            &resources,
+            &output,
+            provider.as_deref(),
+            auto_scaffold,
+            &backend,
+        ),
     };
 
     if let Err(e) = result {
