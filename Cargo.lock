@@ -5,7 +5,7 @@ version = 4
 [[package]]
 name = "ansible-forge"
 version = "0.1.0"
-source = "git+https://github.com/pleme-io/ansible-forge#0bf34e48a1b0c77c94461c7db0f54f865dae4b31"
+source = "git+https://github.com/pleme-io/ansible-forge#57b50f9719a50b52241c08e0f0b3215084c27dff"
 dependencies = [
  "iac-forge",
  "serde",
@@ -138,7 +138,7 @@ dependencies = [
 [[package]]
 name = "crossplane-forge"
 version = "0.1.0"
-source = "git+https://github.com/pleme-io/crossplane-forge#e7ff51cf9311a49e6a94aa1f6f3dffab42fdf7b8"
+source = "git+https://github.com/pleme-io/crossplane-forge#7b469499f650f6c8f44740f2832c2c78359b89ff"
 dependencies = [
  "iac-forge",
  "serde",
@@ -218,7 +218,7 @@ checksum = "2304e00983f87ffb38b55b444b5e3b60a884b5d30c0fca7d82fe33449bbe55ea"
 [[package]]
 name = "iac-forge"
 version = "0.1.0"
-source = "git+https://github.com/pleme-io/iac-forge#efe513808807b1d35c5b944e20095212f89d4efe"
+source = "git+https://github.com/pleme-io/iac-forge#965f7a63b49fb3221c9bb6b10f6bac4b1b1c9278"
 dependencies = [
  "openapi-forge",
  "serde",
@@ -352,7 +352,7 @@ dependencies = [
 [[package]]
 name = "pulumi-forge"
 version = "0.1.0"
-source = "git+https://github.com/pleme-io/pulumi-forge#017938bb9c58bad8edba68742862c7d9a8226b3d"
+source = "git+https://github.com/pleme-io/pulumi-forge#41cb51195c67c79ff4fae37953f04817b5311d6a"
 dependencies = [
  "iac-forge",
  "serde",
@@ -497,7 +497,7 @@ dependencies = [
 [[package]]
 name = "terraform-forge"
 version = "0.1.0"
-source = "git+https://github.com/pleme-io/terraform-forge#277ed580275031c9434a6ea5eb71da88e5e16e95"
+source = "git+https://github.com/pleme-io/terraform-forge#648c064f692fffd802a5d04e2577f420f34771d1"
 dependencies = [
  "heck",
  "iac-forge",

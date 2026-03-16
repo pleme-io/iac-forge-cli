@@ -910,6 +910,12 @@ components:
     }
 
     #[test]
+    #[cfg(all(
+        feature = "terraform",
+        feature = "pulumi",
+        feature = "crossplane",
+        feature = "ansible"
+    ))]
     fn generate_all_creates_subdirectories_per_backend() {
         let dir = TempDir::new().unwrap();
         let spec_path = write_minimal_spec(dir.path());
@@ -928,9 +934,10 @@ components:
         );
         assert!(result.is_ok(), "generate all failed: {:?}", result.err());
 
-        // When --backend all, output should be organized in subdirectories
-        #[cfg(feature = "terraform")]
         assert!(output_dir.join("terraform").exists());
+        assert!(output_dir.join("pulumi").exists());
+        assert!(output_dir.join("crossplane").exists());
+        assert!(output_dir.join("ansible").exists());
     }
 
     #[test]
