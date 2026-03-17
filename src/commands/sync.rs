@@ -179,6 +179,7 @@ pub fn run_with_audit(
         resources_dir,
         output_dir,
         provider_path,
+        None,
     )?;
 
     // Step 6: Summary
@@ -1240,6 +1241,7 @@ token = { skip = true }
             &resources_dir,
             &output_dir,
             Some(&provider_path),
+            None,
         );
         assert!(result.is_ok(), "terraform generate failed: {result:?}");
 
@@ -1334,6 +1336,7 @@ token = { skip = true }
             &resources_dir,
             &output_dir,
             Some(&provider_path),
+            None,
         );
         assert!(result.is_ok(), "pulumi generate failed: {result:?}");
 
@@ -1379,6 +1382,7 @@ token = { skip = true }
             &resources_dir,
             &output_dir,
             Some(&provider_path),
+            None,
         );
         assert!(result.is_ok(), "crossplane generate failed: {result:?}");
 
@@ -1419,6 +1423,7 @@ token = { skip = true }
             &resources_dir,
             &output_dir,
             Some(&provider_path),
+            None,
         );
         assert!(result.is_ok(), "ansible generate failed: {result:?}");
 
@@ -1474,6 +1479,7 @@ token = { skip = true }
             &resources_dir,
             &output_dir,
             Some(&provider_path),
+            None,
         );
         assert!(result.is_ok(), "generate all failed: {result:?}");
 
@@ -1544,6 +1550,7 @@ token = { skip = true }
             &resources_dir,
             &output_dir,
             Some(&provider_path),
+            None,
         );
         assert!(result.is_ok(), "terraform type mapping generate failed: {result:?}");
 
@@ -1579,6 +1586,7 @@ token = { skip = true }
             &resources_dir,
             &output_dir,
             Some(&provider_path),
+            None,
         );
         assert!(result.is_ok(), "pulumi type mapping generate failed: {result:?}");
 
@@ -1640,6 +1648,7 @@ token = { skip = true }
             &resources_dir,
             &output_dir,
             Some(&provider_path),
+            None,
         );
         assert!(result.is_ok(), "crossplane type mapping generate failed: {result:?}");
 
@@ -1679,6 +1688,7 @@ token = { skip = true }
             &resources_dir,
             &output_dir,
             Some(&provider_path),
+            None,
         );
         assert!(result.is_ok(), "ansible type mapping generate failed: {result:?}");
 
@@ -1720,6 +1730,7 @@ token = { skip = true }
             &resources_dir,
             &output_dir,
             Some(&provider_path),
+            None,
         );
         assert!(result.is_ok(), "terraform sensitive field test failed: {result:?}");
 
@@ -1751,6 +1762,7 @@ token = { skip = true }
             &resources_dir,
             &output_dir,
             Some(&provider_path),
+            None,
         );
         assert!(result.is_ok(), "pulumi sensitive field test failed: {result:?}");
 
@@ -1799,6 +1811,7 @@ token = { skip = true }
             &resources_dir,
             &output_dir,
             Some(&provider_path),
+            None,
         );
         assert!(result.is_ok(), "crossplane sensitive field test failed: {result:?}");
 
@@ -1834,6 +1847,7 @@ token = { skip = true }
             &resources_dir,
             &output_dir,
             Some(&provider_path),
+            None,
         );
         assert!(result.is_ok(), "ansible sensitive field test failed: {result:?}");
 
@@ -1867,6 +1881,7 @@ token = { skip = true }
             &resources_dir,
             &output_dir,
             Some(&provider_path),
+            None,
         );
         assert!(result.is_ok(), "terraform immutable field test failed: {result:?}");
 
@@ -1898,6 +1913,7 @@ token = { skip = true }
             &resources_dir,
             &output_dir,
             Some(&provider_path),
+            None,
         );
         assert!(result.is_ok(), "pulumi immutable field test failed: {result:?}");
 
@@ -1947,6 +1963,7 @@ token = { skip = true }
             &resources_dir,
             &output_dir,
             Some(&provider_path),
+            None,
         );
         assert!(result.is_ok(), "crossplane immutable field test failed: {result:?}");
 
@@ -1982,6 +1999,7 @@ token = { skip = true }
             &resources_dir,
             &output_dir,
             Some(&provider_path),
+            None,
         );
         assert!(result.is_ok(), "terraform computed field test failed: {result:?}");
 
@@ -2013,6 +2031,7 @@ token = { skip = true }
             &resources_dir,
             &output_dir,
             Some(&provider_path),
+            None,
         );
         assert!(result.is_ok(), "pulumi computed field test failed: {result:?}");
 
@@ -2058,6 +2077,7 @@ token = { skip = true }
             &resources_dir,
             &output_dir,
             Some(&provider_path),
+            None,
         );
         assert!(result.is_ok(), "crossplane computed field test failed: {result:?}");
 
@@ -2456,6 +2476,7 @@ components:
             &resources_dir,
             &output_dir,
             Some(&provider_path),
+            None,
         );
         assert!(result.is_err(), "generate with invalid spec should return error");
     }
@@ -2475,6 +2496,7 @@ components:
             &spec,
             &resources_dir,
             &output_dir,
+            None,
             None,
         );
         assert!(result.is_err(), "should fail when no provider.toml is found");
@@ -2496,6 +2518,7 @@ components:
             &resources_dir,
             &output_dir,
             Some(&provider_path),
+            None,
         );
         // Should succeed with 0 resources generated
         assert!(result.is_ok(), "empty resources dir should succeed: {result:?}");
@@ -2520,6 +2543,7 @@ components:
             &resources_dir,
             &output_dir,
             Some(&provider_path),
+            None,
         );
         // Should fail with a parse error
         assert!(result.is_err(), "malformed TOML should produce an error");
@@ -2539,6 +2563,7 @@ components:
             &resources_dir,
             &output_dir,
             Some(&provider_path),
+            None,
         );
         assert!(result.is_err(), "nonexistent spec should return error");
     }
@@ -2568,6 +2593,7 @@ components:
             &resources_dir,
             &out1,
             Some(&provider_path),
+            None,
         ).unwrap();
 
         crate::commands::generate::run(
@@ -2576,6 +2602,7 @@ components:
             &resources_dir,
             &out2,
             Some(&provider_path),
+            None,
         ).unwrap();
 
         // Collect all files from both runs

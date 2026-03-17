@@ -87,6 +87,10 @@ enum Commands {
         /// Path to provider.toml
         #[arg(long)]
         provider: Option<PathBuf>,
+
+        /// Directory containing data source TOML specs
+        #[arg(long)]
+        data_sources: Option<PathBuf>,
     },
 
     /// Auto-create resource spec TOMLs from OpenAPI analysis
@@ -183,7 +187,8 @@ fn main() {
             resources,
             output,
             provider,
-        } => commands::generate::run(&backend, &spec, &resources, &output, provider.as_deref()),
+            data_sources,
+        } => commands::generate::run(&backend, &spec, &resources, &output, provider.as_deref(), data_sources.as_deref()),
         Commands::Scaffold {
             spec,
             pattern,

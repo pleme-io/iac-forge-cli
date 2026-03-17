@@ -2,7 +2,7 @@ use std::fs;
 use std::path::Path;
 
 use colored::Colorize;
-use iac_forge::{Backend, ProviderSpec, ResourceSpec, resolve_provider, resolve_resource};
+use iac_forge::{Backend, DataSourceSpec, ProviderSpec, ResourceSpec, resolve_data_source, resolve_provider, resolve_resource};
 use openapi_forge::Spec;
 
 use crate::BackendChoice;
@@ -20,6 +20,7 @@ pub fn run(
     resources_dir: &Path,
     output_dir: &Path,
     provider_path: Option<&Path>,
+    data_sources_dir: Option<&Path>,
 ) -> Result<(), Box<dyn std::error::Error>> {
     println!(
         "{} Loading OpenAPI spec from {}",
@@ -83,6 +84,31 @@ pub fn run(
         );
     }
 
+    // Load and resolve data sources (if directory provided)
+    let mut iac_data_sources = Vec::new();
+    if let Some(ds_dir) = data_sources_dir {
+        if ds_dir.exists() {
+            let ds_files = find_toml_files(ds_dir)?;
+            println!(
+                "{} Found {} data source specs",
+                "=>".blue().bold(),
+                ds_files.len()
+            );
+            for file in &ds_files {
+                let ds_spec = DataSourceSpec::load(file)?;
+                match resolve_data_source(&ds_spec, &api, &provider_spec.defaults) {
+                    Ok(ds) => {
+                        println!("  {} Resolved data source {}", "->".green(), ds.name);
+                        iac_data_sources.push(ds);
+                    }
+                    Err(e) => {
+                        eprintln!("{} {}: {e}", "warning:".yellow().bold(), file.display());
+                    }
+                }
+            }
+        }
+    }
+
     // Dispatch to the appropriate backend(s)
     let backends = match backend {
         BackendChoice::Terraform => vec![BackendChoice::Terraform],
@@ -125,13 +151,19 @@ pub fn run(
             &provider_spec,
             &iac_provider,
             &iac_resources,
+            &iac_data_sources,
             &resource_files,
             &target_dir,
         )?;
     }
 
+    let ds_msg = if iac_data_sources.is_empty() {
+        String::new()
+    } else {
+        format!(" + {} data source(s)", iac_data_sources.len())
+    };
     println!(
-        "\n{} Generated artifacts for {} resource(s) with backend: {}",
+        "\n{} Generated artifacts for {} resource(s){ds_msg} with backend: {}",
         "done".green().bold(),
         iac_resources.len(),
         backend,
@@ -146,6 +178,7 @@ fn generate_for_backend(
     provider_spec: &ProviderSpec,
     iac_provider: &iac_forge::IacProvider,
     iac_resources: &[iac_forge::IacResource],
+    iac_data_sources: &[iac_forge::IacDataSource],
     resource_files: &[std::path::PathBuf],
     output_dir: &Path,
 ) -> Result<(), Box<dyn std::error::Error>> {
@@ -153,11 +186,11 @@ fn generate_for_backend(
         BackendChoice::Terraform => {
             #[cfg(feature = "terraform")]
             {
-                generate_terraform(api, provider_spec, iac_provider, iac_resources, resource_files, output_dir)
+                generate_terraform(api, provider_spec, iac_provider, iac_resources, iac_data_sources, resource_files, output_dir)
             }
             #[cfg(not(feature = "terraform"))]
             {
-                let _ = (api, provider_spec, iac_provider, iac_resources, resource_files, output_dir);
+                let _ = (api, provider_spec, iac_provider, iac_resources, iac_data_sources, resource_files, output_dir);
                 Err("terraform backend not compiled in — enable the 'terraform' feature".into())
             }
         }
@@ -169,12 +202,13 @@ fn generate_for_backend(
                     &pulumi_forge::PulumiBackend::new(),
                     iac_provider,
                     iac_resources,
+                    iac_data_sources,
                     output_dir,
                 )
             }
             #[cfg(not(feature = "pulumi"))]
             {
-                let _ = (api, provider_spec, iac_provider, iac_resources, resource_files, output_dir);
+                let _ = (api, provider_spec, iac_provider, iac_resources, iac_data_sources, resource_files, output_dir);
                 Err("pulumi backend not yet available — pulumi-forge crate pending".into())
             }
         }
@@ -186,12 +220,13 @@ fn generate_for_backend(
                     &crossplane_forge::CrossplaneBackend,
                     iac_provider,
                     iac_resources,
+                    iac_data_sources,
                     output_dir,
                 )
             }
             #[cfg(not(feature = "crossplane"))]
             {
-                let _ = (api, provider_spec, iac_provider, iac_resources, resource_files, output_dir);
+                let _ = (api, provider_spec, iac_provider, iac_resources, iac_data_sources, resource_files, output_dir);
                 Err("crossplane backend not yet available — crossplane-forge crate pending".into())
             }
         }
@@ -203,12 +238,13 @@ fn generate_for_backend(
                     &ansible_forge::AnsibleBackend::new(),
                     iac_provider,
                     iac_resources,
+                    iac_data_sources,
                     output_dir,
                 )
             }
             #[cfg(not(feature = "ansible"))]
             {
-                let _ = (api, provider_spec, iac_provider, iac_resources, resource_files, output_dir);
+                let _ = (api, provider_spec, iac_provider, iac_resources, iac_data_sources, resource_files, output_dir);
                 Err("ansible backend not yet available — ansible-forge crate pending".into())
             }
         }
@@ -220,12 +256,13 @@ fn generate_for_backend(
                     &pangea_forge::PangeaBackend,
                     iac_provider,
                     iac_resources,
+                    iac_data_sources,
                     output_dir,
                 )
             }
             #[cfg(not(feature = "pangea"))]
             {
-                let _ = (api, provider_spec, iac_provider, iac_resources, resource_files, output_dir);
+                let _ = (api, provider_spec, iac_provider, iac_resources, iac_data_sources, resource_files, output_dir);
                 Err("pangea backend not yet available — pangea-forge crate pending".into())
             }
         }
@@ -237,12 +274,13 @@ fn generate_for_backend(
                     &steampipe_forge::SteampipeBackend,
                     iac_provider,
                     iac_resources,
+                    iac_data_sources,
                     output_dir,
                 )
             }
             #[cfg(not(feature = "steampipe"))]
             {
-                let _ = (api, provider_spec, iac_provider, iac_resources, resource_files, output_dir);
+                let _ = (api, provider_spec, iac_provider, iac_resources, iac_data_sources, resource_files, output_dir);
                 Err("steampipe backend not compiled in — enable the 'steampipe' feature".into())
             }
         }
@@ -254,12 +292,13 @@ fn generate_for_backend(
                     &helm_forge::HelmBackend::default(),
                     iac_provider,
                     iac_resources,
+                    iac_data_sources,
                     output_dir,
                 )
             }
             #[cfg(not(feature = "helm"))]
             {
-                let _ = (api, provider_spec, iac_provider, iac_resources, resource_files, output_dir);
+                let _ = (api, provider_spec, iac_provider, iac_resources, iac_data_sources, resource_files, output_dir);
                 Err("helm backend not compiled in — enable the 'helm' feature".into())
             }
         }
@@ -267,12 +306,13 @@ fn generate_for_backend(
     }
 }
 
-/// Generate using the iac-forge Backend trait (for Pulumi, Crossplane, Ansible).
+/// Generate using the iac-forge Backend trait (for Pulumi, Crossplane, Ansible, etc.).
 #[allow(dead_code)]
 fn generate_via_backend(
     backend: &dyn Backend,
     iac_provider: &iac_forge::IacProvider,
     iac_resources: &[iac_forge::IacResource],
+    iac_data_sources: &[iac_forge::IacDataSource],
     output_dir: &Path,
 ) -> Result<(), Box<dyn std::error::Error>> {
     fs::create_dir_all(output_dir)?;
@@ -302,10 +342,23 @@ fn generate_via_backend(
         }
     }
 
+    // Generate data source artifacts
+    for ds in iac_data_sources {
+        let artifacts = backend.generate_data_source(ds, iac_provider)?;
+        for artifact in &artifacts {
+            let out_path = output_dir.join(&artifact.path);
+            if let Some(parent) = out_path.parent() {
+                fs::create_dir_all(parent)?;
+            }
+            fs::write(&out_path, &artifact.content)?;
+            println!("  {} {}", "->".green(), artifact.path);
+            artifact_count += 1;
+        }
+    }
+
     // Generate provider-level artifacts
-    let data_sources = Vec::new();
     let provider_artifacts =
-        backend.generate_provider(iac_provider, iac_resources, &data_sources)?;
+        backend.generate_provider(iac_provider, iac_resources, iac_data_sources)?;
     for artifact in &provider_artifacts {
         let out_path = output_dir.join(&artifact.path);
         if let Some(parent) = out_path.parent() {
@@ -336,6 +389,7 @@ fn generate_terraform(
     provider_spec: &ProviderSpec,
     _iac_provider: &iac_forge::IacProvider,
     _iac_resources: &[iac_forge::IacResource],
+    iac_data_sources: &[iac_forge::IacDataSource],
     resource_files: &[std::path::PathBuf],
     output_dir: &Path,
 ) -> Result<(), Box<dyn std::error::Error>> {
@@ -419,7 +473,7 @@ fn generate_terraform(
         "->".green(),
         type_names.len()
     );
-    let data_source_names: Vec<String> = Vec::new();
+    let data_source_names: Vec<String> = iac_data_sources.iter().map(|ds| ds.name.clone()).collect();
     let provider_code =
         terraform_forge::generate_provider(&tf_provider, &type_names, &tf_names, &data_source_names);
     fs::write(provider_out.join("provider.go"), &provider_code)?;
@@ -698,6 +752,7 @@ id_field = "name"
             &resources_dir,
             &output_dir,
             Some(&provider_path),
+            None,
         );
         assert!(result.is_ok(), "generate failed: {:?}", result.err());
 
@@ -893,6 +948,7 @@ components:
                 &resources_dir,
                 &output_dir,
                 Some(&provider_path),
+                None,
             );
             assert!(result.is_ok(), "pulumi generate failed: {:?}", result.err());
             assert!(
@@ -927,6 +983,7 @@ components:
                 &resources_dir,
                 &output_dir,
                 Some(&provider_path),
+                None,
             );
             assert!(result.is_ok(), "crossplane generate failed: {:?}", result.err());
             // Should produce CRD YAML files
@@ -960,6 +1017,7 @@ components:
                 &resources_dir,
                 &output_dir,
                 Some(&provider_path),
+                None,
             );
             assert!(result.is_ok(), "ansible generate failed: {:?}", result.err());
             // Should produce Python module files
@@ -993,6 +1051,7 @@ components:
                 &resources_dir,
                 &output_dir,
                 Some(&provider_path),
+                None,
             );
             assert!(result.is_ok(), "steampipe generate failed: {:?}", result.err());
             // Should produce Go table files and plugin.go
@@ -1030,6 +1089,7 @@ components:
                 &resources_dir,
                 &output_dir,
                 Some(&provider_path),
+                None,
             );
             assert!(result.is_ok(), "helm generate failed: {:?}", result.err());
             // Should produce Chart.yaml files
@@ -1090,6 +1150,7 @@ components:
             &resources_dir,
             &output_dir,
             Some(&provider_path),
+            None,
         );
         assert!(result.is_ok(), "generate all failed: {:?}", result.err());
 
@@ -1115,6 +1176,7 @@ components:
             &spec_path,
             &resources_dir,
             &output_dir,
+            None,
             None,
         );
         assert!(result.is_err(), "should fail when provider.toml is missing");
@@ -1157,6 +1219,7 @@ id_field = "name"
             &resources_dir,
             &output_dir,
             Some(&provider_path),
+            None,
         );
         // Should succeed even with one invalid resource (it gets skipped)
         assert!(result.is_ok(), "generate should succeed with partial resources: {:?}", result.err());
