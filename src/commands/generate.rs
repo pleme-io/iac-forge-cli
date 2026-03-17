@@ -91,6 +91,7 @@ pub fn run(
         BackendChoice::Ansible => vec![BackendChoice::Ansible],
         BackendChoice::Pangea => vec![BackendChoice::Pangea],
         BackendChoice::Steampipe => vec![BackendChoice::Steampipe],
+        BackendChoice::Helm => vec![BackendChoice::Helm],
         BackendChoice::All => {
             let mut v = Vec::new();
             v.push(BackendChoice::Terraform);
@@ -99,6 +100,7 @@ pub fn run(
             v.push(BackendChoice::Ansible);
             v.push(BackendChoice::Pangea);
             v.push(BackendChoice::Steampipe);
+            v.push(BackendChoice::Helm);
             v
         }
     };
@@ -242,6 +244,23 @@ fn generate_for_backend(
             {
                 let _ = (api, provider_spec, iac_provider, iac_resources, resource_files, output_dir);
                 Err("steampipe backend not compiled in — enable the 'steampipe' feature".into())
+            }
+        }
+        BackendChoice::Helm => {
+            #[cfg(feature = "helm")]
+            {
+                let _ = (api, provider_spec, resource_files);
+                generate_via_backend(
+                    &helm_forge::HelmBackend::default(),
+                    iac_provider,
+                    iac_resources,
+                    output_dir,
+                )
+            }
+            #[cfg(not(feature = "helm"))]
+            {
+                let _ = (api, provider_spec, iac_provider, iac_resources, resource_files, output_dir);
+                Err("helm backend not compiled in — enable the 'helm' feature".into())
             }
         }
         BackendChoice::All => unreachable!("All is expanded before calling this function"),
@@ -443,6 +462,7 @@ mod tests {
         assert_eq!(BackendChoice::Ansible.to_string(), "ansible");
         assert_eq!(BackendChoice::Pangea.to_string(), "pangea");
         assert_eq!(BackendChoice::Steampipe.to_string(), "steampipe");
+        assert_eq!(BackendChoice::Helm.to_string(), "helm");
         assert_eq!(BackendChoice::All.to_string(), "all");
     }
 
@@ -457,17 +477,19 @@ mod tests {
                 v.push(BackendChoice::Ansible);
                 v.push(BackendChoice::Pangea);
                 v.push(BackendChoice::Steampipe);
+                v.push(BackendChoice::Helm);
                 v
             }
             _ => unreachable!(),
         };
-        assert_eq!(all_backends.len(), 6);
+        assert_eq!(all_backends.len(), 7);
         assert!(all_backends.iter().any(|b| matches!(b, BackendChoice::Terraform)));
         assert!(all_backends.iter().any(|b| matches!(b, BackendChoice::Pulumi)));
         assert!(all_backends.iter().any(|b| matches!(b, BackendChoice::Crossplane)));
         assert!(all_backends.iter().any(|b| matches!(b, BackendChoice::Ansible)));
         assert!(all_backends.iter().any(|b| matches!(b, BackendChoice::Pangea)));
         assert!(all_backends.iter().any(|b| matches!(b, BackendChoice::Steampipe)));
+        assert!(all_backends.iter().any(|b| matches!(b, BackendChoice::Helm)));
     }
 
     #[test]

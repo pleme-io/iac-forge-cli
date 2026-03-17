@@ -34,6 +34,7 @@ Feature-gated via Cargo features:
 - `ansible` — Python modules via `ansible-forge`
 - `pangea` — Ruby DSL via `pangea-forge`
 - `steampipe` — Go Steampipe plugin tables via `steampipe-forge`
+- `helm` — Helm charts (pleme-lib delegates) via `helm-forge`
 
 ## Sync Command
 

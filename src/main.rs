@@ -16,6 +16,7 @@ pub enum BackendChoice {
     Ansible,
     Pangea,
     Steampipe,
+    Helm,
     All,
 }
 
@@ -28,6 +29,7 @@ impl std::fmt::Display for BackendChoice {
             Self::Ansible => write!(f, "ansible"),
             Self::Pangea => write!(f, "pangea"),
             Self::Steampipe => write!(f, "steampipe"),
+            Self::Helm => write!(f, "helm"),
             Self::All => write!(f, "all"),
         }
     }
@@ -44,6 +46,7 @@ impl std::str::FromStr for BackendChoice {
             "ansible" => Ok(Self::Ansible),
             "pangea" => Ok(Self::Pangea),
             "steampipe" => Ok(Self::Steampipe),
+            "helm" => Ok(Self::Helm),
             "all" => Ok(Self::All),
             other => Err(format!("unknown backend: {other}")),
         }

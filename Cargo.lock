@@ -272,9 +272,19 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2304e00983f87ffb38b55b444b5e3b60a884b5d30c0fca7d82fe33449bbe55ea"
 
 [[package]]
+name = "helm-forge"
+version = "0.1.0"
+source = "git+https://github.com/pleme-io/helm-forge#98dee75d590e84ac3f874bc9a6d7a0fb8cf6c979"
+dependencies = [
+ "iac-forge",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
 name = "iac-forge"
 version = "0.1.0"
-source = "git+https://github.com/pleme-io/iac-forge#7f9b57397baaa71c5b0ba60b7cb641ed221e4fde"
+source = "git+https://github.com/pleme-io/iac-forge#e45d9891a4b054f4d68710fe1a50b4545bb54d60"
 dependencies = [
  "openapi-forge",
  "serde",
@@ -293,6 +303,7 @@ dependencies = [
  "colored",
  "crossplane-forge",
  "glob",
+ "helm-forge",
  "iac-forge",
  "openapi-forge",
  "pangea-forge",

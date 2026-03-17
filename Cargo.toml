@@ -26,6 +26,7 @@ crossplane = ["dep:crossplane-forge"]
 ansible = ["dep:ansible-forge"]
 pangea = ["dep:pangea-forge"]
 steampipe = ["dep:steampipe-forge"]
+helm = ["dep:helm-forge"]
 
 [dependencies]
 openapi-forge = { git = "https://github.com/pleme-io/openapi-forge" }
@@ -36,6 +37,7 @@ crossplane-forge = { git = "https://github.com/pleme-io/crossplane-forge", optio
 ansible-forge = { git = "https://github.com/pleme-io/ansible-forge", optional = true }
 pangea-forge = { git = "https://github.com/pleme-io/pangea-forge", optional = true }
 steampipe-forge = { git = "https://github.com/pleme-io/steampipe-forge", optional = true }
+helm-forge = { git = "https://github.com/pleme-io/helm-forge", optional = true }
 chrono = "0.4"
 clap = { version = "4", features = ["derive"] }
 colored = "3"
