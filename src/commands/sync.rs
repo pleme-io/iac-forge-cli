@@ -32,20 +32,6 @@ fn audit_log(path: &Path, event: &str, data: serde_json::Value) {
 /// Returns an error if any critical step (spec loading, generation) fails.
 /// Validation warnings are reported but do not halt the pipeline.
 #[allow(clippy::too_many_arguments)]
-pub fn run(
-    old_spec_path: &Path,
-    new_spec_path: &Path,
-    resources_dir: &Path,
-    output_dir: &Path,
-    provider_path: Option<&Path>,
-    auto_scaffold: bool,
-    backend: &str,
-) -> Result<(), Box<dyn std::error::Error>> {
-    run_with_audit(old_spec_path, new_spec_path, resources_dir, output_dir, provider_path, auto_scaffold, backend, None)
-}
-
-/// Run sync with optional audit log output.
-#[allow(clippy::too_many_arguments)]
 pub fn run_with_audit(
     old_spec_path: &Path,
     new_spec_path: &Path,
@@ -206,6 +192,115 @@ pub fn run_with_audit(
             "files_generated": file_count,
             "auto_scaffold": auto_scaffold,
         }));
+    }
+
+    Ok(())
+}
+
+/// Options controlling post-generation validation and failure notification.
+#[derive(Debug, Default)]
+#[cfg_attr(not(feature = "helm"), allow(dead_code))]
+pub struct PostValidationOptions<'a> {
+    /// When true, run Helm chart validation after generation.
+    pub post_validate: bool,
+    /// Optional webhook URL for failure notifications (via curl).
+    pub notify_webhook: Option<&'a str>,
+    /// Optional file path for appending failure log lines.
+    pub notify_log: Option<&'a Path>,
+}
+
+/// Run the full sync pipeline with optional post-generation validation.
+///
+/// Delegates to [`run_with_audit`] for the core pipeline, then runs Helm chart
+/// validation (if enabled) and sends failure notifications on validation errors.
+///
+/// # Errors
+///
+/// Returns an error if the core sync pipeline fails or if post-validation
+/// detects invalid Helm charts.
+#[allow(clippy::too_many_arguments)]
+pub fn run_with_post_validation(
+    old_spec_path: &Path,
+    new_spec_path: &Path,
+    resources_dir: &Path,
+    output_dir: &Path,
+    provider_path: Option<&Path>,
+    auto_scaffold: bool,
+    backend: &str,
+    audit_path: Option<&Path>,
+    post_opts: &PostValidationOptions<'_>,
+) -> Result<(), Box<dyn std::error::Error>> {
+    // Run the core sync pipeline.
+    run_with_audit(
+        old_spec_path,
+        new_spec_path,
+        resources_dir,
+        output_dir,
+        provider_path,
+        auto_scaffold,
+        backend,
+        audit_path,
+    )?;
+
+    // Post-generation validation (helm feature only).
+    if post_opts.post_validate {
+        #[cfg(feature = "helm")]
+        {
+            println!(
+                "\n{} Running post-generation Helm chart validation...",
+                "=>".blue().bold()
+            );
+
+            match crate::commands::post_validate::validate_helm_charts(output_dir) {
+                Ok(report) => {
+                    println!("  {} {report}", "ok".green());
+                    if let Some(audit) = audit_path {
+                        audit_log(
+                            audit,
+                            "post_validate_passed",
+                            serde_json::json!({
+                                "charts_validated": report.charts.len(),
+                                "helm_available": report.helm_available,
+                            }),
+                        );
+                    }
+                }
+                Err(e) => {
+                    let summary = e.to_string();
+                    eprintln!(
+                        "  {} post-validation failed:\n{summary}",
+                        "FAIL".red().bold()
+                    );
+
+                    if let Some(audit) = audit_path {
+                        audit_log(
+                            audit,
+                            "post_validate_failed",
+                            serde_json::json!({
+                                "summary": summary,
+                            }),
+                        );
+                    }
+
+                    if let Some(webhook_url) = post_opts.notify_webhook {
+                        crate::commands::notify::notify_failure(webhook_url, &summary);
+                    }
+                    if let Some(log_path) = post_opts.notify_log {
+                        crate::commands::notify::notify_log(log_path, &summary);
+                    }
+
+                    return Err(e);
+                }
+            }
+        }
+
+        #[cfg(not(feature = "helm"))]
+        {
+            println!(
+                "  {} --post-validate requires the 'helm' feature; skipping",
+                "!".yellow()
+            );
+        }
     }
 
     Ok(())
@@ -408,7 +503,7 @@ token = { skip = true }
         write_resource_toml(&resources_dir);
         let output_dir = dir.path().join("output");
 
-        let result = super::run(
+        let result = super::run_with_audit(
             &old_spec,
             &new_spec,
             &resources_dir,
@@ -416,6 +511,7 @@ token = { skip = true }
             Some(&provider_path),
             false,
             "terraform",
+            None,
         );
 
         assert!(result.is_ok(), "sync failed: {result:?}");
@@ -434,7 +530,7 @@ token = { skip = true }
         write_resource_toml(&resources_dir);
         let output_dir = dir.path().join("output");
 
-        let result = super::run(
+        let result = super::run_with_audit(
             &old_spec,
             &new_spec,
             &resources_dir,
@@ -442,6 +538,7 @@ token = { skip = true }
             Some(&provider_path),
             true,
             "terraform",
+            None,
         );
 
         assert!(result.is_ok(), "sync with auto-scaffold failed: {result:?}");
@@ -459,7 +556,7 @@ token = { skip = true }
         let output_dir = dir.path().join("output");
 
         // "invalid-backend" should fall back to All
-        let result = super::run(
+        let result = super::run_with_audit(
             &old_spec,
             &new_spec,
             &resources_dir,
@@ -467,6 +564,7 @@ token = { skip = true }
             Some(&provider_path),
             false,
             "invalid-backend",
+            None,
         );
 
         // This may fail because not all backends are compiled in, but it should
@@ -514,7 +612,7 @@ token = { skip = true }
 
         // old spec path that does not exist — first run
         let nonexistent_old = dir.path().join("does_not_exist.yaml");
-        let result = super::run(
+        let result = super::run_with_audit(
             &nonexistent_old,
             &new_spec,
             &resources_dir,
@@ -522,6 +620,7 @@ token = { skip = true }
             Some(&provider_path),
             false,
             "terraform",
+            None,
         );
 
         assert!(result.is_ok(), "first-run sync should succeed: {result:?}");

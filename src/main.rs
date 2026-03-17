@@ -174,6 +174,18 @@ enum Commands {
         /// Path to structured JSON audit log (JSONL). Events appended for traceability.
         #[arg(long)]
         audit_log: Option<PathBuf>,
+
+        /// Enable post-generation Helm chart validation (requires helm feature)
+        #[arg(long, default_value = "false")]
+        post_validate: bool,
+
+        /// Webhook URL for failure notifications (sent via curl on validation failure)
+        #[arg(long)]
+        notify_webhook: Option<String>,
+
+        /// File path for appending failure notification log lines (JSONL)
+        #[arg(long)]
+        notify_log: Option<PathBuf>,
     },
 }
 
@@ -206,16 +218,27 @@ fn main() {
             auto_scaffold,
             backend,
             audit_log,
-        } => commands::sync::run_with_audit(
-            &spec_old,
-            &spec_new,
-            &resources,
-            &output,
-            provider.as_deref(),
-            auto_scaffold,
-            &backend,
-            audit_log.as_deref(),
-        ),
+            post_validate,
+            notify_webhook,
+            notify_log,
+        } => {
+            let post_opts = commands::sync::PostValidationOptions {
+                post_validate,
+                notify_webhook: notify_webhook.as_deref(),
+                notify_log: notify_log.as_deref(),
+            };
+            commands::sync::run_with_post_validation(
+                &spec_old,
+                &spec_new,
+                &resources,
+                &output,
+                provider.as_deref(),
+                auto_scaffold,
+                &backend,
+                audit_log.as_deref(),
+                &post_opts,
+            )
+        }
     };
 
     if let Err(e) = result {
