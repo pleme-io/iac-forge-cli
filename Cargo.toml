@@ -19,7 +19,7 @@ path = "src/main.rs"
 pedantic = "warn"
 
 [features]
-default = ["terraform"]
+default = ["terraform", "pulumi", "crossplane", "ansible", "pangea", "steampipe", "helm"]
 terraform = ["dep:terraform-forge"]
 pulumi = ["dep:pulumi-forge"]
 crossplane = ["dep:crossplane-forge"]
