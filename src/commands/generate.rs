@@ -1013,12 +1013,67 @@ components:
     }
 
     #[test]
+    fn generate_with_helm_backend() {
+        let dir = TempDir::new().unwrap();
+        let spec_path = write_minimal_spec(dir.path());
+        let provider_path = write_provider_toml(dir.path());
+        let resources_dir = dir.path().join("resources");
+        fs::create_dir_all(&resources_dir).unwrap();
+        write_resource_toml(&resources_dir);
+        let output_dir = dir.path().join("helm_output");
+
+        #[cfg(feature = "helm")]
+        {
+            let result = run(
+                &BackendChoice::Helm,
+                &spec_path,
+                &resources_dir,
+                &output_dir,
+                Some(&provider_path),
+            );
+            assert!(result.is_ok(), "helm generate failed: {:?}", result.err());
+            // Should produce Chart.yaml files
+            let charts: Vec<_> = glob::glob(&format!("{}/**/Chart.yaml", output_dir.display()))
+                .unwrap()
+                .filter_map(Result::ok)
+                .collect();
+            assert!(!charts.is_empty(), "helm should produce Chart.yaml files");
+
+            // Should produce values.yaml files
+            let values: Vec<_> = glob::glob(&format!("{}/**/values.yaml", output_dir.display()))
+                .unwrap()
+                .filter_map(Result::ok)
+                .collect();
+            assert!(!values.is_empty(), "helm should produce values.yaml files");
+
+            // Should produce values.schema.json files
+            let schemas: Vec<_> = glob::glob(&format!("{}/**/values.schema.json", output_dir.display()))
+                .unwrap()
+                .filter_map(Result::ok)
+                .collect();
+            assert!(!schemas.is_empty(), "helm should produce values.schema.json files");
+
+            // Templates directory should exist with delegate files
+            let templates: Vec<_> = glob::glob(&format!("{}/**/templates/*.yaml", output_dir.display()))
+                .unwrap()
+                .filter_map(Result::ok)
+                .collect();
+            assert!(templates.len() >= 8, "helm should produce at least 8 template files");
+        }
+        #[cfg(not(feature = "helm"))]
+        {
+            let _ = (spec_path, provider_path, resources_dir, output_dir);
+        }
+    }
+
+    #[test]
     #[cfg(all(
         feature = "terraform",
         feature = "pulumi",
         feature = "crossplane",
         feature = "ansible",
-        feature = "steampipe"
+        feature = "steampipe",
+        feature = "helm"
     ))]
     fn generate_all_creates_subdirectories_per_backend() {
         let dir = TempDir::new().unwrap();
@@ -1043,6 +1098,7 @@ components:
         assert!(output_dir.join("crossplane").exists());
         assert!(output_dir.join("ansible").exists());
         assert!(output_dir.join("steampipe").exists());
+        assert!(output_dir.join("helm").exists());
     }
 
     #[test]
