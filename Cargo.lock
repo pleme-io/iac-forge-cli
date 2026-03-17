@@ -188,7 +188,7 @@ checksum = "773648b94d0e5d620f64f280777445740e61fe701025087ec8b57f45c791888b"
 [[package]]
 name = "crossplane-forge"
 version = "0.1.0"
-source = "git+https://github.com/pleme-io/crossplane-forge#2b1f8724f9c44f034324c9599f83c79f651e1a6c"
+source = "git+https://github.com/pleme-io/crossplane-forge#7c1b9326a18200f8be31b53923cd0630dbbbde9a"
 dependencies = [
  "iac-forge",
  "serde",
@@ -274,7 +274,7 @@ checksum = "2304e00983f87ffb38b55b444b5e3b60a884b5d30c0fca7d82fe33449bbe55ea"
 [[package]]
 name = "helm-forge"
 version = "0.1.0"
-source = "git+https://github.com/pleme-io/helm-forge#ea41dd14cddf261bc0dadfe807e637538612b157"
+source = "git+https://github.com/pleme-io/helm-forge#7b10ccb99bc533343e42e1a22e8673b4215218d9"
 dependencies = [
  "iac-forge",
  "serde",
@@ -285,7 +285,7 @@ dependencies = [
 [[package]]
 name = "iac-forge"
 version = "0.1.0"
-source = "git+https://github.com/pleme-io/iac-forge#ce9f7f89dcd70a8d81cd184052b02d6804fd4ef5"
+source = "git+https://github.com/pleme-io/iac-forge#372986db2d4b57706d49a37cc0cda7fde2f83312"
 dependencies = [
  "openapi-forge",
  "serde",
@@ -435,7 +435,7 @@ checksum = "384b8ab6d37215f3c5301a95a4accb5d64aa607f1fcb26a11b5303878451b4fe"
 [[package]]
 name = "openapi-forge"
 version = "0.1.0"
-source = "git+https://github.com/pleme-io/openapi-forge#2d1b6a349f765c11df6e7ef2127966dfa721a7d3"
+source = "git+https://github.com/pleme-io/openapi-forge#b6d578cce3cc26d90f2a8668a57763647bd7ac41"
 dependencies = [
  "indexmap",
  "serde",
