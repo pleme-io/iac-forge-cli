@@ -116,7 +116,7 @@ rec {
         workspace_member = null;
         src = pkgs.fetchgit {
           url = "https://github.com/pleme-io/ansible-forge";
-          rev = "57b50f9719a50b52241c08e0f0b3215084c27dff";
+          rev = "97f3adc60a057c377254dce3f8c06d273643bf3a";
           sha256 = "1mq6yn2nl5s3sahzh23szrb6684l8ppvcfn9d5zawa361fzp2yyi";
         };
         libName = "ansible_forge";
@@ -571,7 +571,7 @@ rec {
         workspace_member = null;
         src = pkgs.fetchgit {
           url = "https://github.com/pleme-io/crossplane-forge";
-          rev = "7b469499f650f6c8f44740f2832c2c78359b89ff";
+          rev = "2b1f8724f9c44f034324c9599f83c79f651e1a6c";
           sha256 = "0s785mj75z4k8ns37jwlkmvkvixwzd561d2n1lhsih21clx21sgy";
         };
         libName = "crossplane_forge";
@@ -590,8 +590,8 @@ rec {
             packageId = "serde_json";
           }
           {
-            name = "serde_yaml";
-            packageId = "serde_yaml";
+            name = "serde_yaml_ng";
+            packageId = "serde_yaml_ng";
           }
           {
             name = "toml";
@@ -836,6 +836,38 @@ rec {
         sha256 = "1sjmpsdl8czyh9ywl3qcsfsq9a307dg4ni2vnlwgnzzqhc4y0113";
 
       };
+      "helm-forge" = rec {
+        crateName = "helm-forge";
+        version = "0.1.0";
+        edition = "2024";
+        workspace_member = null;
+        src = pkgs.fetchgit {
+          url = "https://github.com/pleme-io/helm-forge";
+          rev = "ea41dd14cddf261bc0dadfe807e637538612b157";
+          sha256 = "1h879m1cwqaklg2iz1ck1js3rwcna3i1kh1wjqzylskdjwkgki13";
+        };
+        libName = "helm_forge";
+        dependencies = [
+          {
+            name = "iac-forge";
+            packageId = "iac-forge";
+          }
+          {
+            name = "serde";
+            packageId = "serde";
+            features = [ "derive" ];
+          }
+          {
+            name = "serde_json";
+            packageId = "serde_json";
+          }
+          {
+            name = "serde_yaml_ng";
+            packageId = "serde_yaml_ng";
+          }
+        ];
+
+      };
       "iac-forge" = rec {
         crateName = "iac-forge";
         version = "0.1.0";
@@ -843,7 +875,7 @@ rec {
         workspace_member = null;
         src = pkgs.fetchgit {
           url = "https://github.com/pleme-io/iac-forge";
-          rev = "7f9b57397baaa71c5b0ba60b7cb641ed221e4fde";
+          rev = "ce9f7f89dcd70a8d81cd184052b02d6804fd4ef5";
           sha256 = "02j5znrwchyq98mks6ginfc54l9r6sjkni4rndlmbkm13kqsjxfp";
         };
         libName = "iac_forge";
@@ -913,6 +945,11 @@ rec {
             packageId = "glob";
           }
           {
+            name = "helm-forge";
+            packageId = "helm-forge";
+            optional = true;
+          }
+          {
             name = "iac-forge";
             packageId = "iac-forge";
           }
@@ -963,13 +1000,14 @@ rec {
         features = {
           "ansible" = [ "dep:ansible-forge" ];
           "crossplane" = [ "dep:crossplane-forge" ];
-          "default" = [ "terraform" ];
+          "default" = [ "terraform" "pulumi" "crossplane" "ansible" "pangea" "steampipe" "helm" ];
+          "helm" = [ "dep:helm-forge" ];
           "pangea" = [ "dep:pangea-forge" ];
           "pulumi" = [ "dep:pulumi-forge" ];
           "steampipe" = [ "dep:steampipe-forge" ];
           "terraform" = [ "dep:terraform-forge" ];
         };
-        resolvedDefaultFeatures = [ "ansible" "crossplane" "default" "pangea" "pulumi" "steampipe" "terraform" ];
+        resolvedDefaultFeatures = [ "ansible" "crossplane" "default" "helm" "pangea" "pulumi" "steampipe" "terraform" ];
       };
       "iana-time-zone" = rec {
         crateName = "iana-time-zone";
@@ -1294,7 +1332,7 @@ rec {
         workspace_member = null;
         src = pkgs.fetchgit {
           url = "https://github.com/pleme-io/openapi-forge";
-          rev = "e9bd7d2313580b9dd5357dd22cde9fc5111cd124";
+          rev = "2d1b6a349f765c11df6e7ef2127966dfa721a7d3";
           sha256 = "15h1nylbr18v33s1d58zq9r5n8a7iwx2vpybc9fbv1dw5d6qi3cn";
         };
         libName = "openapi_forge";
@@ -1314,8 +1352,8 @@ rec {
             packageId = "serde_json";
           }
           {
-            name = "serde_yaml";
-            packageId = "serde_yaml";
+            name = "serde_yaml_ng";
+            packageId = "serde_yaml_ng";
           }
           {
             name = "thiserror";
@@ -1331,7 +1369,7 @@ rec {
         workspace_member = null;
         src = pkgs.fetchgit {
           url = "https://github.com/pleme-io/pangea-forge";
-          rev = "b98d0c1a57badd772ff23543574f9608fe449451";
+          rev = "380516323c4ca30f2e26fbb70d7cc60646d59366";
           sha256 = "1bsv2lpxzlp7ngrl2hkaq01qby23a7ni9077p66kagm561vk9hba";
         };
         libName = "pangea_forge";
@@ -1419,7 +1457,7 @@ rec {
         workspace_member = null;
         src = pkgs.fetchgit {
           url = "https://github.com/pleme-io/pulumi-forge";
-          rev = "bd2be10c52887a159dcd7b089fd90543908fc50d";
+          rev = "92c21db3c35913413987c8ad70f4878a230c9b11";
           sha256 = "1dm1b27q2iikac39qzi8g4ppw7h3b19kdk8hsjphdi44s7nsvjfb";
         };
         libName = "pulumi_forge";
@@ -1784,13 +1822,13 @@ rec {
         };
         resolvedDefaultFeatures = [ "serde" ];
       };
-      "serde_yaml" = rec {
-        crateName = "serde_yaml";
-        version = "0.9.34+deprecated";
+      "serde_yaml_ng" = rec {
+        crateName = "serde_yaml_ng";
+        version = "0.10.0";
         edition = "2021";
-        sha256 = "0isba1fjyg3l6rxk156k600ilzr8fp7crv82rhal0rxz5qd1m2va";
+        sha256 = "07ylpzx9xykdj4fqfa0vb6xz4c1pazrqqibv78hd8dlbp4kvckbv";
         authors = [
-          "David Tolnay <dtolnay@gmail.com>"
+          "Antoine Catton <devel@antoine.catton.fr>"
         ];
         dependencies = [
           {
@@ -1841,7 +1879,7 @@ rec {
         workspace_member = null;
         src = pkgs.fetchgit {
           url = "https://github.com/pleme-io/steampipe-forge";
-          rev = "efbb038fbaa454e64e95bfd85db36e0e760de596";
+          rev = "82bb1fa431ff4d60e182c70de289f6e62292a3ae";
           sha256 = "0snhb6kddlwy9avh6d7v913n9b9y6s46x79wnrw56x4jgcwrz2ia";
         };
         libName = "steampipe_forge";
@@ -1961,7 +1999,7 @@ rec {
         workspace_member = null;
         src = pkgs.fetchgit {
           url = "https://github.com/pleme-io/terraform-forge";
-          rev = "648c064f692fffd802a5d04e2577f420f34771d1";
+          rev = "36e4ddd956173c019cc82becad2204e3b5fdd35d";
           sha256 = "0gnyzc8vycs8zd3a9g5q80lnk6493fl6b98fkyigz0n1x8x1ddii";
         };
         libName = "terraform_forge";

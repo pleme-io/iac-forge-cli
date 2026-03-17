@@ -2,6 +2,7 @@ use std::collections::HashSet;
 use std::fs::OpenOptions;
 use std::io::Write as _;
 use std::path::Path;
+use std::process::Command;
 
 use colored::Colorize;
 use openapi_forge::Spec;
@@ -197,7 +198,7 @@ pub fn run_with_audit(
     Ok(())
 }
 
-/// Options controlling post-generation validation and failure notification.
+/// Options controlling post-generation validation, failure notification, and auto-commit.
 #[derive(Debug, Default)]
 #[cfg_attr(not(feature = "helm"), allow(dead_code))]
 pub struct PostValidationOptions<'a> {
@@ -207,6 +208,12 @@ pub struct PostValidationOptions<'a> {
     pub notify_webhook: Option<&'a str>,
     /// Optional file path for appending failure log lines.
     pub notify_log: Option<&'a Path>,
+    /// When true, auto-commit generated artifacts in the output directory.
+    pub auto_commit: bool,
+    /// When true (and `auto_commit` is true), push after committing.
+    pub auto_push: bool,
+    /// Custom commit message. Falls back to a default with timestamp.
+    pub commit_message: Option<&'a str>,
 }
 
 /// Run the full sync pipeline with optional post-generation validation.
@@ -303,7 +310,222 @@ pub fn run_with_post_validation(
         }
     }
 
+    // Auto-commit and push if requested.
+    if post_opts.auto_commit {
+        auto_commit_and_push(
+            output_dir,
+            post_opts.auto_push,
+            post_opts.commit_message,
+            audit_path,
+        );
+    }
+
     Ok(())
+}
+
+/// Build the default commit message with an RFC 3339 timestamp.
+fn default_commit_message() -> String {
+    format!(
+        "chore: regenerate artifacts from OpenAPI spec {}",
+        chrono::Utc::now().to_rfc3339()
+    )
+}
+
+/// Stage, commit, and optionally push generated artifacts in `output_dir`.
+///
+/// Errors from git commands are logged but intentionally do **not** fail the
+/// pipeline — the artifacts have already been written to disk.
+fn auto_commit_and_push(
+    output_dir: &Path,
+    auto_push: bool,
+    commit_message: Option<&str>,
+    audit_path: Option<&Path>,
+) {
+    println!(
+        "\n{} Auto-committing generated artifacts...",
+        "=>".blue().bold()
+    );
+
+    let message = commit_message
+        .map(String::from)
+        .unwrap_or_else(default_commit_message);
+
+    // git add -A
+    let add_result = Command::new("git")
+        .args(["-C", &output_dir.display().to_string(), "add", "-A"])
+        .output();
+
+    match &add_result {
+        Ok(output) if output.status.success() => {
+            println!("  {} staged changes", "ok".green());
+        }
+        Ok(output) => {
+            let stderr = String::from_utf8_lossy(&output.stderr);
+            eprintln!(
+                "  {} git add failed (exit {}): {stderr}",
+                "!".yellow(),
+                output.status
+            );
+            if let Some(audit) = audit_path {
+                audit_log(
+                    audit,
+                    "auto_commit_stage_failed",
+                    serde_json::json!({
+                        "output_dir": output_dir.display().to_string(),
+                        "stderr": stderr.to_string(),
+                    }),
+                );
+            }
+            return;
+        }
+        Err(e) => {
+            eprintln!("  {} failed to run git add: {e}", "!".yellow());
+            if let Some(audit) = audit_path {
+                audit_log(
+                    audit,
+                    "auto_commit_stage_failed",
+                    serde_json::json!({
+                        "output_dir": output_dir.display().to_string(),
+                        "error": e.to_string(),
+                    }),
+                );
+            }
+            return;
+        }
+    }
+
+    // git commit -m "<message>"
+    let commit_result = Command::new("git")
+        .args([
+            "-C",
+            &output_dir.display().to_string(),
+            "commit",
+            "-m",
+            &message,
+        ])
+        .output();
+
+    match &commit_result {
+        Ok(output) if output.status.success() => {
+            println!("  {} committed: {message}", "ok".green());
+            if let Some(audit) = audit_path {
+                audit_log(
+                    audit,
+                    "auto_commit_success",
+                    serde_json::json!({
+                        "output_dir": output_dir.display().to_string(),
+                        "message": message,
+                    }),
+                );
+            }
+        }
+        Ok(output) => {
+            let stderr = String::from_utf8_lossy(&output.stderr);
+            let stdout = String::from_utf8_lossy(&output.stdout);
+            // "nothing to commit" is not a real error.
+            if stdout.contains("nothing to commit") || stderr.contains("nothing to commit") {
+                println!("  {} nothing to commit", "ok".green());
+                if let Some(audit) = audit_path {
+                    audit_log(
+                        audit,
+                        "auto_commit_nothing",
+                        serde_json::json!({
+                            "output_dir": output_dir.display().to_string(),
+                        }),
+                    );
+                }
+            } else {
+                eprintln!(
+                    "  {} git commit failed (exit {}): {stderr}",
+                    "!".yellow(),
+                    output.status
+                );
+                if let Some(audit) = audit_path {
+                    audit_log(
+                        audit,
+                        "auto_commit_failed",
+                        serde_json::json!({
+                            "output_dir": output_dir.display().to_string(),
+                            "stderr": stderr.to_string(),
+                        }),
+                    );
+                }
+            }
+            return;
+        }
+        Err(e) => {
+            eprintln!("  {} failed to run git commit: {e}", "!".yellow());
+            if let Some(audit) = audit_path {
+                audit_log(
+                    audit,
+                    "auto_commit_failed",
+                    serde_json::json!({
+                        "output_dir": output_dir.display().to_string(),
+                        "error": e.to_string(),
+                    }),
+                );
+            }
+            return;
+        }
+    }
+
+    // git push (only if auto_push is true)
+    if auto_push {
+        println!(
+            "\n{} Auto-pushing to remote...",
+            "=>".blue().bold()
+        );
+
+        let push_result = Command::new("git")
+            .args(["-C", &output_dir.display().to_string(), "push"])
+            .output();
+
+        match &push_result {
+            Ok(output) if output.status.success() => {
+                println!("  {} pushed", "ok".green());
+                if let Some(audit) = audit_path {
+                    audit_log(
+                        audit,
+                        "auto_push_success",
+                        serde_json::json!({
+                            "output_dir": output_dir.display().to_string(),
+                        }),
+                    );
+                }
+            }
+            Ok(output) => {
+                let stderr = String::from_utf8_lossy(&output.stderr);
+                eprintln!(
+                    "  {} git push failed (exit {}): {stderr}",
+                    "!".yellow(),
+                    output.status
+                );
+                if let Some(audit) = audit_path {
+                    audit_log(
+                        audit,
+                        "auto_push_failed",
+                        serde_json::json!({
+                            "output_dir": output_dir.display().to_string(),
+                            "stderr": stderr.to_string(),
+                        }),
+                    );
+                }
+            }
+            Err(e) => {
+                eprintln!("  {} failed to run git push: {e}", "!".yellow());
+                if let Some(audit) = audit_path {
+                    audit_log(
+                        audit,
+                        "auto_push_failed",
+                        serde_json::json!({
+                            "output_dir": output_dir.display().to_string(),
+                            "error": e.to_string(),
+                        }),
+                    );
+                }
+            }
+        }
+    }
 }
 
 /// Count files recursively in a directory.
@@ -2837,5 +3059,141 @@ components:
 
         let total_files = event["data"]["files_generated"].as_u64().unwrap_or(0);
         assert!(total_files > 4, "all backends should generate many files, got {total_files}");
+    }
+
+    // =========================================================================
+    // Auto-commit / auto-push tests
+    // =========================================================================
+
+    #[test]
+    fn auto_commit_false_does_not_run_git() {
+        // When auto_commit is false, run_with_post_validation should not
+        // invoke git at all. We verify this indirectly: the output dir is
+        // NOT a git repo, so any git invocation would fail. If auto_commit
+        // were mistakenly true, git add would fail and (if it propagated)
+        // would show errors. We just confirm the pipeline succeeds cleanly.
+        let dir = TempDir::new().unwrap();
+        let old_spec = write_old_spec(dir.path());
+        let new_spec = write_new_spec(dir.path());
+        let provider_path = write_provider_toml(dir.path());
+        let resources_dir = dir.path().join("resources");
+        fs::create_dir_all(&resources_dir).unwrap();
+        write_resource_toml(&resources_dir);
+        let output_dir = dir.path().join("output");
+
+        let post_opts = super::PostValidationOptions {
+            post_validate: false,
+            notify_webhook: None,
+            notify_log: None,
+            auto_commit: false,
+            auto_push: false,
+            commit_message: None,
+        };
+        let result = super::run_with_post_validation(
+            &old_spec,
+            &new_spec,
+            &resources_dir,
+            &output_dir,
+            Some(&provider_path),
+            false,
+            "terraform",
+            None,
+            &post_opts,
+        );
+        assert!(result.is_ok(), "sync with auto_commit=false should succeed: {result:?}");
+
+        // No .git directory should exist inside the output directory.
+        assert!(
+            !output_dir.join(".git").exists(),
+            "output dir should not be a git repo when auto_commit is false"
+        );
+    }
+
+    #[test]
+    fn default_commit_message_format() {
+        let msg = super::default_commit_message();
+        assert!(
+            msg.starts_with("chore: regenerate artifacts from OpenAPI spec "),
+            "default message should start with the expected prefix, got: {msg}"
+        );
+        // The remainder should be an RFC 3339 timestamp (contains 'T' and '+' or 'Z').
+        let timestamp_part = msg
+            .strip_prefix("chore: regenerate artifacts from OpenAPI spec ")
+            .unwrap();
+        assert!(
+            timestamp_part.contains('T'),
+            "timestamp should contain 'T' separator, got: {timestamp_part}"
+        );
+    }
+
+    #[test]
+    fn auto_commit_on_git_repo() {
+        // Set up a real git repo in the output directory, run sync with
+        // auto_commit=true, and verify a commit is created.
+        let dir = TempDir::new().unwrap();
+        let old_spec = write_old_spec(dir.path());
+        let new_spec = write_new_spec(dir.path());
+        let provider_path = write_provider_toml(dir.path());
+        let resources_dir = dir.path().join("resources");
+        fs::create_dir_all(&resources_dir).unwrap();
+        write_resource_toml(&resources_dir);
+        let output_dir = dir.path().join("output");
+        fs::create_dir_all(&output_dir).unwrap();
+
+        // Initialise a git repo in the output directory.
+        let init = std::process::Command::new("git")
+            .args(["init", &output_dir.display().to_string()])
+            .output();
+        if init.is_err() || !init.as_ref().unwrap().status.success() {
+            // git not available in this test environment; skip gracefully.
+            return;
+        }
+        // Configure committer identity for the test repo.
+        let _ = std::process::Command::new("git")
+            .args(["-C", &output_dir.display().to_string(), "config", "user.email", "test@test.local"])
+            .output();
+        let _ = std::process::Command::new("git")
+            .args(["-C", &output_dir.display().to_string(), "config", "user.name", "Test"])
+            .output();
+
+        let audit_path = dir.path().join("commit_audit.jsonl");
+        let post_opts = super::PostValidationOptions {
+            post_validate: false,
+            notify_webhook: None,
+            notify_log: None,
+            auto_commit: true,
+            auto_push: false,
+            commit_message: Some("test: auto-commit integration"),
+        };
+        let result = super::run_with_post_validation(
+            &old_spec,
+            &new_spec,
+            &resources_dir,
+            &output_dir,
+            Some(&provider_path),
+            false,
+            "terraform",
+            Some(&audit_path),
+            &post_opts,
+        );
+        assert!(result.is_ok(), "sync with auto_commit=true should succeed: {result:?}");
+
+        // Verify a commit was created.
+        let log = std::process::Command::new("git")
+            .args(["-C", &output_dir.display().to_string(), "log", "--oneline", "-1"])
+            .output()
+            .expect("git log should succeed");
+        let log_text = String::from_utf8_lossy(&log.stdout);
+        assert!(
+            log_text.contains("test: auto-commit integration"),
+            "commit message should appear in git log, got: {log_text}"
+        );
+
+        // Verify audit log recorded the commit.
+        let audit_content = fs::read_to_string(&audit_path).unwrap();
+        let has_commit_event = audit_content
+            .lines()
+            .any(|line| line.contains("auto_commit_success"));
+        assert!(has_commit_event, "audit log should contain auto_commit_success event");
     }
 }

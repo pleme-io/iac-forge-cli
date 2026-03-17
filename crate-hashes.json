@@ -1,6 +1,7 @@
 {
   "git+https://github.com/pleme-io/ansible-forge#0.1.0": "1mq6yn2nl5s3sahzh23szrb6684l8ppvcfn9d5zawa361fzp2yyi",
   "git+https://github.com/pleme-io/crossplane-forge#0.1.0": "0s785mj75z4k8ns37jwlkmvkvixwzd561d2n1lhsih21clx21sgy",
+  "git+https://github.com/pleme-io/helm-forge#0.1.0": "1h879m1cwqaklg2iz1ck1js3rwcna3i1kh1wjqzylskdjwkgki13",
   "git+https://github.com/pleme-io/iac-forge#0.1.0": "02j5znrwchyq98mks6ginfc54l9r6sjkni4rndlmbkm13kqsjxfp",
   "git+https://github.com/pleme-io/openapi-forge#0.1.0": "15h1nylbr18v33s1d58zq9r5n8a7iwx2vpybc9fbv1dw5d6qi3cn",
   "git+https://github.com/pleme-io/pangea-forge#0.1.0": "1bsv2lpxzlp7ngrl2hkaq01qby23a7ni9077p66kagm561vk9hba",

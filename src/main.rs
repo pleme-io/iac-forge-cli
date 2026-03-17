@@ -186,6 +186,18 @@ enum Commands {
         /// File path for appending failure notification log lines (JSONL)
         #[arg(long)]
         notify_log: Option<PathBuf>,
+
+        /// Auto-commit generated artifacts in the output directory
+        #[arg(long, default_value = "false")]
+        auto_commit: bool,
+
+        /// Auto-push after committing (requires --auto-commit)
+        #[arg(long, default_value = "false")]
+        auto_push: bool,
+
+        /// Custom commit message for auto-commit
+        #[arg(long)]
+        commit_message: Option<String>,
     },
 }
 
@@ -221,11 +233,17 @@ fn main() {
             post_validate,
             notify_webhook,
             notify_log,
+            auto_commit,
+            auto_push,
+            commit_message,
         } => {
             let post_opts = commands::sync::PostValidationOptions {
                 post_validate,
                 notify_webhook: notify_webhook.as_deref(),
                 notify_log: notify_log.as_deref(),
+                auto_commit,
+                auto_push,
+                commit_message: commit_message.as_deref(),
             };
             commands::sync::run_with_post_validation(
                 &spec_old,
