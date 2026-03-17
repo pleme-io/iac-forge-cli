@@ -14,7 +14,7 @@ dependencies = [
 [[package]]
 name = "ansible-forge"
 version = "0.1.0"
-source = "git+https://github.com/pleme-io/ansible-forge#57b50f9719a50b52241c08e0f0b3215084c27dff"
+source = "git+https://github.com/pleme-io/ansible-forge#97f3adc60a057c377254dce3f8c06d273643bf3a"
 dependencies = [
  "iac-forge",
  "serde",
@@ -188,12 +188,12 @@ checksum = "773648b94d0e5d620f64f280777445740e61fe701025087ec8b57f45c791888b"
 [[package]]
 name = "crossplane-forge"
 version = "0.1.0"
-source = "git+https://github.com/pleme-io/crossplane-forge#7b469499f650f6c8f44740f2832c2c78359b89ff"
+source = "git+https://github.com/pleme-io/crossplane-forge#2b1f8724f9c44f034324c9599f83c79f651e1a6c"
 dependencies = [
  "iac-forge",
  "serde",
  "serde_json",
- "serde_yaml",
+ "serde_yaml_ng",
  "toml",
 ]
 
@@ -285,7 +285,7 @@ dependencies = [
 [[package]]
 name = "iac-forge"
 version = "0.1.0"
-source = "git+https://github.com/pleme-io/iac-forge#e45d9891a4b054f4d68710fe1a50b4545bb54d60"
+source = "git+https://github.com/pleme-io/iac-forge#ce9f7f89dcd70a8d81cd184052b02d6804fd4ef5"
 dependencies = [
  "openapi-forge",
  "serde",
@@ -435,19 +435,19 @@ checksum = "384b8ab6d37215f3c5301a95a4accb5d64aa607f1fcb26a11b5303878451b4fe"
 [[package]]
 name = "openapi-forge"
 version = "0.1.0"
-source = "git+https://github.com/pleme-io/openapi-forge#e9bd7d2313580b9dd5357dd22cde9fc5111cd124"
+source = "git+https://github.com/pleme-io/openapi-forge#2d1b6a349f765c11df6e7ef2127966dfa721a7d3"
 dependencies = [
  "indexmap",
  "serde",
  "serde_json",
- "serde_yaml",
+ "serde_yaml_ng",
  "thiserror",
 ]
 
 [[package]]
 name = "pangea-forge"
 version = "0.1.0"
-source = "git+https://github.com/pleme-io/pangea-forge#b98d0c1a57badd772ff23543574f9608fe449451"
+source = "git+https://github.com/pleme-io/pangea-forge#380516323c4ca30f2e26fbb70d7cc60646d59366"
 dependencies = [
  "iac-forge",
  "serde",
@@ -476,7 +476,7 @@ dependencies = [
 [[package]]
 name = "pulumi-forge"
 version = "0.1.0"
-source = "git+https://github.com/pleme-io/pulumi-forge#bd2be10c52887a159dcd7b089fd90543908fc50d"
+source = "git+https://github.com/pleme-io/pulumi-forge#92c21db3c35913413987c8ad70f4878a230c9b11"
 dependencies = [
  "iac-forge",
  "serde",
@@ -582,19 +582,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "serde_yaml"
-version = "0.9.34+deprecated"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6a8b1a1a2ebf674015cc02edccce75287f1a0130d394307b36743c2f5d504b47"
-dependencies = [
- "indexmap",
- "itoa",
- "ryu",
- "serde",
- "unsafe-libyaml",
-]
-
-[[package]]
 name = "serde_yaml_ng"
 version = "0.10.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -616,7 +603,7 @@ checksum = "0fda2ff0d084019ba4d7c6f371c95d8fd75ce3524c3cb8fb653a3023f6323e64"
 [[package]]
 name = "steampipe-forge"
 version = "0.1.0"
-source = "git+https://github.com/pleme-io/steampipe-forge#efbb038fbaa454e64e95bfd85db36e0e760de596"
+source = "git+https://github.com/pleme-io/steampipe-forge#82bb1fa431ff4d60e182c70de289f6e62292a3ae"
 dependencies = [
  "iac-forge",
  "serde",
@@ -656,7 +643,7 @@ dependencies = [
 [[package]]
 name = "terraform-forge"
 version = "0.1.0"
-source = "git+https://github.com/pleme-io/terraform-forge#648c064f692fffd802a5d04e2577f420f34771d1"
+source = "git+https://github.com/pleme-io/terraform-forge#36e4ddd956173c019cc82becad2204e3b5fdd35d"
 dependencies = [
  "heck",
  "iac-forge",
