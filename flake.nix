@@ -36,7 +36,7 @@
       inherit self;
       serviceName = "iac-forge";
       registry = "ghcr.io/pleme-io/iac-forge";
-      packageName = "iac-forge";
+      packageName = "iac-forge-cli";
       namespace = "forge-system";
       architectures = ["amd64" "arm64"];
       ports = { health = 8081; };
