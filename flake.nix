@@ -1,14 +1,8 @@
 {
   description = "iac-forge-cli — unified CLI for generating IaC providers from OpenAPI specs";
 
-  nixConfig = {
-    allow-import-from-derivation = true;
-  };
-
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
-    crate2nix.url = "github:nix-community/crate2nix";
-    flake-utils.url = "github:numtide/flake-utils";
     fenix = {
       url = "github:nix-community/fenix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -18,26 +12,33 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.fenix.follows = "fenix";
     };
+    forge = {
+      url = "github:pleme-io/forge";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.fenix.follows = "fenix";
+      inputs.substrate.follows = "substrate";
+      inputs.crate2nix.follows = "crate2nix";
+    };
+    crate2nix = {
+      url = "github:nix-community/crate2nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     devenv = {
       url = "github:cachix/devenv";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
-  outputs = {
-    self,
-    nixpkgs,
-    crate2nix,
-    flake-utils,
-    substrate,
-    devenv,
-    ...
-  }:
-    (import "${substrate}/lib/rust-tool-release-flake.nix" {
-      inherit nixpkgs crate2nix flake-utils devenv;
+  outputs = { self, nixpkgs, substrate, forge, crate2nix, devenv, ... }:
+    (import "${substrate}/lib/rust-service-flake.nix" {
+      inherit nixpkgs substrate forge crate2nix devenv;
     }) {
-      toolName = "iac-forge";
-      src = self;
-      repo = "pleme-io/iac-forge-cli";
+      inherit self;
+      serviceName = "iac-forge";
+      registry = "ghcr.io/pleme-io/iac-forge";
+      packageName = "iac-forge";
+      namespace = "forge-system";
+      architectures = ["amd64" "arm64"];
+      ports = { health = 8081; };
     };
 }
