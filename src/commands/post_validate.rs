@@ -443,6 +443,116 @@ mod tests {
     }
 
     #[test]
+    fn display_shows_failure_details() {
+        let report = ValidationReport {
+            charts: vec![ChartResult {
+                name: "broken".to_string(),
+                lint_passed: false,
+                template_passed: false,
+                errors: vec!["lint: missing".to_string(), "template: bad".to_string()],
+            }],
+            helm_available: true,
+        };
+        let display = format!("{report}");
+        assert!(display.contains("broken"), "should mention chart name");
+        assert!(display.contains("lint"), "should mention lint failure");
+        assert!(display.contains("template"), "should mention template failure");
+    }
+
+    #[test]
+    fn all_passed_single_chart_both_pass() {
+        let report = ValidationReport {
+            charts: vec![ChartResult {
+                name: "good".to_string(),
+                lint_passed: true,
+                template_passed: true,
+                errors: Vec::new(),
+            }],
+            helm_available: true,
+        };
+        assert!(report.all_passed());
+    }
+
+    #[test]
+    fn all_passed_false_when_lint_fails() {
+        let report = ValidationReport {
+            charts: vec![ChartResult {
+                name: "chart".to_string(),
+                lint_passed: false,
+                template_passed: true,
+                errors: Vec::new(),
+            }],
+            helm_available: true,
+        };
+        assert!(!report.all_passed());
+    }
+
+    #[test]
+    fn all_passed_false_when_template_fails() {
+        let report = ValidationReport {
+            charts: vec![ChartResult {
+                name: "chart".to_string(),
+                lint_passed: true,
+                template_passed: false,
+                errors: Vec::new(),
+            }],
+            helm_available: true,
+        };
+        assert!(!report.all_passed());
+    }
+
+    #[test]
+    fn failure_summary_multiple_failures() {
+        let report = ValidationReport {
+            charts: vec![
+                ChartResult {
+                    name: "a".to_string(),
+                    lint_passed: false,
+                    template_passed: true,
+                    errors: vec!["lint: issue-a".to_string()],
+                },
+                ChartResult {
+                    name: "b".to_string(),
+                    lint_passed: true,
+                    template_passed: false,
+                    errors: vec!["template: issue-b".to_string()],
+                },
+            ],
+            helm_available: true,
+        };
+        let summary = report.failure_summary();
+        assert!(summary.contains("2 of 2"));
+        assert!(summary.contains("issue-a"));
+        assert!(summary.contains("issue-b"));
+    }
+
+    #[test]
+    fn discover_chart_dirs_ignores_files() {
+        let dir = TempDir::new().unwrap();
+        let charts_root = dir.path().join("helm").join("charts");
+        fs::create_dir_all(&charts_root).unwrap();
+        fs::write(charts_root.join("not-a-dir.txt"), "hello").unwrap();
+        fs::create_dir_all(charts_root.join("real-chart")).unwrap();
+
+        let charts = discover_chart_dirs(dir.path());
+        assert_eq!(charts.len(), 1);
+        assert!(charts[0].ends_with("real-chart"));
+    }
+
+    #[test]
+    fn chart_result_errors_empty_when_passing() {
+        let result = ChartResult {
+            name: "pass".to_string(),
+            lint_passed: true,
+            template_passed: true,
+            errors: Vec::new(),
+        };
+        assert!(result.errors.is_empty());
+        assert!(result.lint_passed);
+        assert!(result.template_passed);
+    }
+
+    #[test]
     fn failure_summary_format() {
         let report = ValidationReport {
             charts: vec![

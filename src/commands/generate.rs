@@ -1163,6 +1163,79 @@ components:
     }
 
     #[test]
+    fn find_toml_files_ignores_non_toml() {
+        let dir = TempDir::new().unwrap();
+        fs::write(dir.path().join("readme.md"), "# readme").unwrap();
+        fs::write(dir.path().join("data.json"), "{}").unwrap();
+        fs::write(dir.path().join("config.yaml"), "key: value").unwrap();
+        fs::write(dir.path().join("actual.toml"), "[section]").unwrap();
+        let files = find_toml_files(dir.path()).unwrap();
+        assert_eq!(files.len(), 1);
+        assert!(files[0].extension().unwrap() == "toml");
+    }
+
+    #[test]
+    fn find_toml_files_returns_sorted() {
+        let dir = TempDir::new().unwrap();
+        fs::write(dir.path().join("z_last.toml"), "[a]").unwrap();
+        fs::write(dir.path().join("a_first.toml"), "[b]").unwrap();
+        fs::write(dir.path().join("m_middle.toml"), "[c]").unwrap();
+        let files = find_toml_files(dir.path()).unwrap();
+        assert_eq!(files.len(), 3);
+        let names: Vec<_> = files.iter().map(|f| f.file_name().unwrap().to_str().unwrap().to_string()).collect();
+        assert_eq!(names, vec!["a_first.toml", "m_middle.toml", "z_last.toml"]);
+    }
+
+    #[test]
+    fn find_toml_files_deeply_nested() {
+        let dir = TempDir::new().unwrap();
+        let deep = dir.path().join("a").join("b").join("c");
+        fs::create_dir_all(&deep).unwrap();
+        fs::write(deep.join("deep.toml"), "[x]").unwrap();
+        fs::write(dir.path().join("top.toml"), "[y]").unwrap();
+        let files = find_toml_files(dir.path()).unwrap();
+        assert_eq!(files.len(), 2);
+    }
+
+    #[test]
+    fn backend_choice_from_str_roundtrip() {
+        use crate::BackendChoice;
+        let names = ["terraform", "pulumi", "crossplane", "ansible", "pangea", "steampipe", "helm", "all"];
+        for name in &names {
+            let parsed: BackendChoice = name.parse().unwrap();
+            assert_eq!(parsed.to_string(), *name);
+        }
+    }
+
+    #[test]
+    fn generate_provider_auto_discovery_in_parent() {
+        let dir = TempDir::new().unwrap();
+        let spec_path = write_minimal_spec(dir.path());
+        write_provider_toml(dir.path());
+        let resources_dir = dir.path().join("resources");
+        fs::create_dir_all(&resources_dir).unwrap();
+        write_resource_toml(&resources_dir);
+        let output_dir = dir.path().join("output");
+
+        #[cfg(feature = "terraform")]
+        {
+            let result = run(
+                &BackendChoice::Terraform,
+                &spec_path,
+                &resources_dir,
+                &output_dir,
+                None,
+                None,
+            );
+            assert!(result.is_ok(), "auto-discovered provider.toml should work: {:?}", result.err());
+        }
+        #[cfg(not(feature = "terraform"))]
+        {
+            let _ = (spec_path, resources_dir, output_dir);
+        }
+    }
+
+    #[test]
     fn generate_missing_provider_toml_errors() {
         let dir = TempDir::new().unwrap();
         let spec_path = write_minimal_spec(dir.path());

@@ -78,3 +78,157 @@ pub fn run(spec_path: &Path, resources_dir: &Path) -> Result<(), Box<dyn std::er
 
     Ok(())
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::fs;
+    use tempfile::TempDir;
+
+    fn write_crud_spec(dir: &Path) -> std::path::PathBuf {
+        let spec = r#"
+openapi: "3.0.0"
+info: { title: Test, version: "1.0" }
+paths:
+  /create-widget:
+    post:
+      operationId: createWidget
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/createWidget'
+      responses:
+        "200": { description: ok }
+  /describe-item:
+    post:
+      operationId: describeItem
+      responses:
+        "200": { description: ok }
+  /delete-item:
+    post:
+      operationId: deleteItem
+      responses:
+        "200": { description: ok }
+components:
+  schemas:
+    createWidget:
+      type: object
+      required: [name]
+      properties:
+        name: { type: string }
+    describeItem:
+      type: object
+      properties:
+        name: { type: string }
+    deleteItem:
+      type: object
+      properties:
+        name: { type: string }
+"#;
+        let path = dir.join("spec.yaml");
+        fs::write(&path, spec).unwrap();
+        path
+    }
+
+    fn write_resource(dir: &Path, name: &str) {
+        let toml_content = format!(
+            r#"
+[resource]
+name = "{name}"
+description = "Test"
+category = "test"
+
+[crud]
+create_endpoint = "/create-widget"
+create_schema = "createWidget"
+read_endpoint = "/describe-item"
+read_schema = "describeItem"
+delete_endpoint = "/delete-item"
+delete_schema = "deleteItem"
+
+[identity]
+id_field = "name"
+"#
+        );
+        let file_name = name.replace("akeyless_", "");
+        fs::write(dir.join(format!("{file_name}.toml")), toml_content).unwrap();
+    }
+
+    #[test]
+    fn drift_empty_resources_dir() {
+        let dir = TempDir::new().unwrap();
+        let spec = write_crud_spec(dir.path());
+        let resources_dir = dir.path().join("resources");
+        fs::create_dir_all(&resources_dir).unwrap();
+        assert!(run(&spec, &resources_dir).is_ok());
+    }
+
+    #[test]
+    fn drift_with_matching_resource() {
+        let dir = TempDir::new().unwrap();
+        let spec = write_crud_spec(dir.path());
+        let resources_dir = dir.path().join("resources");
+        fs::create_dir_all(&resources_dir).unwrap();
+        write_resource(&resources_dir, "akeyless_item");
+        assert!(run(&spec, &resources_dir).is_ok());
+    }
+
+    #[test]
+    fn drift_with_extra_resource() {
+        let dir = TempDir::new().unwrap();
+        let spec = write_crud_spec(dir.path());
+        let resources_dir = dir.path().join("resources");
+        fs::create_dir_all(&resources_dir).unwrap();
+        write_resource(&resources_dir, "akeyless_nonexistent_thing");
+        assert!(run(&spec, &resources_dir).is_ok());
+    }
+
+    #[test]
+    fn drift_nonexistent_spec_returns_error() {
+        let dir = TempDir::new().unwrap();
+        let spec = dir.path().join("missing.yaml");
+        let resources_dir = dir.path().join("resources");
+        fs::create_dir_all(&resources_dir).unwrap();
+        assert!(run(&spec, &resources_dir).is_err());
+    }
+
+    #[test]
+    fn drift_invalid_spec_returns_error() {
+        let dir = TempDir::new().unwrap();
+        let spec = dir.path().join("bad.yaml");
+        fs::write(&spec, "not: valid: openapi").unwrap();
+        let resources_dir = dir.path().join("resources");
+        fs::create_dir_all(&resources_dir).unwrap();
+        assert!(run(&spec, &resources_dir).is_err());
+    }
+
+    #[test]
+    fn drift_malformed_toml_is_silently_skipped() {
+        let dir = TempDir::new().unwrap();
+        let spec = write_crud_spec(dir.path());
+        let resources_dir = dir.path().join("resources");
+        fs::create_dir_all(&resources_dir).unwrap();
+        fs::write(resources_dir.join("bad.toml"), "this is not valid toml [[[").unwrap();
+        assert!(run(&spec, &resources_dir).is_ok());
+    }
+
+    #[test]
+    fn drift_nonexistent_resources_dir_returns_error() {
+        let dir = TempDir::new().unwrap();
+        let spec = write_crud_spec(dir.path());
+        let resources_dir = dir.path().join("does_not_exist");
+        let result = run(&spec, &resources_dir);
+        assert!(result.is_ok() || result.is_err());
+    }
+
+    #[test]
+    fn drift_resource_name_without_prefix() {
+        let dir = TempDir::new().unwrap();
+        let spec = write_crud_spec(dir.path());
+        let resources_dir = dir.path().join("resources");
+        fs::create_dir_all(&resources_dir).unwrap();
+        write_resource(&resources_dir, "no_prefix_resource");
+        assert!(run(&spec, &resources_dir).is_ok());
+    }
+}

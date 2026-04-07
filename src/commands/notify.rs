@@ -212,4 +212,65 @@ mod tests {
         let parsed: serde_json::Value = serde_json::from_str(&json_str).unwrap();
         assert_eq!(parsed["summary"].as_str().unwrap(), summary);
     }
+
+    #[test]
+    fn payload_unicode_summary() {
+        let summary = "chart 'αβγ': failed with 日本語エラー 🚀";
+        let json_str = build_failure_payload(summary);
+        let parsed: serde_json::Value = serde_json::from_str(&json_str).unwrap();
+        assert_eq!(parsed["summary"].as_str().unwrap(), summary);
+    }
+
+    #[test]
+    fn payload_very_long_summary() {
+        let summary = "x".repeat(10_000);
+        let json_str = build_failure_payload(&summary);
+        let parsed: serde_json::Value = serde_json::from_str(&json_str).unwrap();
+        assert_eq!(parsed["summary"].as_str().unwrap().len(), 10_000);
+    }
+
+    #[test]
+    fn payload_newlines_and_tabs() {
+        let summary = "line1\nline2\n\ttabbed\r\nwindows";
+        let json_str = build_failure_payload(summary);
+        let parsed: serde_json::Value = serde_json::from_str(&json_str).unwrap();
+        assert_eq!(parsed["summary"].as_str().unwrap(), summary);
+    }
+
+    #[test]
+    fn notify_log_multiple_entries_are_valid_jsonl() {
+        let dir = TempDir::new().unwrap();
+        let log_path = dir.path().join("multi.jsonl");
+
+        for i in 0..5 {
+            notify_log(&log_path, &format!("failure #{i}"));
+        }
+
+        let content = fs::read_to_string(&log_path).unwrap();
+        let lines: Vec<&str> = content.lines().collect();
+        assert_eq!(lines.len(), 5);
+        for (i, line) in lines.iter().enumerate() {
+            let parsed: serde_json::Value = serde_json::from_str(line)
+                .unwrap_or_else(|e| panic!("line {i} is not valid JSON: {e}"));
+            assert_eq!(parsed["event"], "iac_forge_failure");
+            let expected_summary = format!("failure #{i}");
+            assert_eq!(parsed["summary"], expected_summary);
+        }
+    }
+
+    #[test]
+    fn payload_backslash_and_quotes() {
+        let summary = r#"path: C:\Users\test\file "name""#;
+        let json_str = build_failure_payload(summary);
+        let parsed: serde_json::Value = serde_json::from_str(&json_str).unwrap();
+        assert_eq!(parsed["summary"].as_str().unwrap(), summary);
+    }
+
+    #[test]
+    fn payload_null_bytes_in_summary() {
+        let summary = "before\0after";
+        let json_str = build_failure_payload(summary);
+        let parsed: serde_json::Value = serde_json::from_str(&json_str).unwrap();
+        assert_eq!(parsed["summary"].as_str().unwrap(), summary);
+    }
 }
