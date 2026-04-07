@@ -201,6 +201,63 @@ enum Commands {
     },
 }
 
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn from_str_valid_lowercase() {
+        assert!(matches!("terraform".parse::<BackendChoice>(), Ok(BackendChoice::Terraform)));
+        assert!(matches!("pulumi".parse::<BackendChoice>(), Ok(BackendChoice::Pulumi)));
+        assert!(matches!("crossplane".parse::<BackendChoice>(), Ok(BackendChoice::Crossplane)));
+        assert!(matches!("ansible".parse::<BackendChoice>(), Ok(BackendChoice::Ansible)));
+        assert!(matches!("pangea".parse::<BackendChoice>(), Ok(BackendChoice::Pangea)));
+        assert!(matches!("steampipe".parse::<BackendChoice>(), Ok(BackendChoice::Steampipe)));
+        assert!(matches!("helm".parse::<BackendChoice>(), Ok(BackendChoice::Helm)));
+        assert!(matches!("all".parse::<BackendChoice>(), Ok(BackendChoice::All)));
+    }
+
+    #[test]
+    fn from_str_case_insensitive() {
+        assert!(matches!("Terraform".parse::<BackendChoice>(), Ok(BackendChoice::Terraform)));
+        assert!(matches!("PULUMI".parse::<BackendChoice>(), Ok(BackendChoice::Pulumi)));
+        assert!(matches!("CrossPlane".parse::<BackendChoice>(), Ok(BackendChoice::Crossplane)));
+        assert!(matches!("ALL".parse::<BackendChoice>(), Ok(BackendChoice::All)));
+        assert!(matches!("HeLm".parse::<BackendChoice>(), Ok(BackendChoice::Helm)));
+    }
+
+    #[test]
+    fn from_str_invalid_returns_error() {
+        let err = "not-a-backend".parse::<BackendChoice>().unwrap_err();
+        assert!(err.contains("unknown backend"));
+        assert!(err.contains("not-a-backend"));
+    }
+
+    #[test]
+    fn from_str_empty_string_returns_error() {
+        assert!("".parse::<BackendChoice>().is_err());
+    }
+
+    #[test]
+    fn display_roundtrip() {
+        let variants = [
+            BackendChoice::Terraform,
+            BackendChoice::Pulumi,
+            BackendChoice::Crossplane,
+            BackendChoice::Ansible,
+            BackendChoice::Pangea,
+            BackendChoice::Steampipe,
+            BackendChoice::Helm,
+            BackendChoice::All,
+        ];
+        for v in &variants {
+            let s = v.to_string();
+            let parsed: BackendChoice = s.parse().unwrap();
+            assert_eq!(parsed.to_string(), s, "roundtrip failed for {s}");
+        }
+    }
+}
+
 fn main() {
     let cli = Cli::parse();
 

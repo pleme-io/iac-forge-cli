@@ -71,3 +71,100 @@ pub fn run(old_path: &Path, new_path: &Path) -> Result<(), Box<dyn std::error::E
 
     Ok(())
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::fs;
+    use tempfile::TempDir;
+
+    fn write_spec(dir: &Path, name: &str, paths: &[&str], schemas: &[&str]) -> std::path::PathBuf {
+        let mut paths_yaml = String::new();
+        for p in paths {
+            paths_yaml.push_str(&format!(
+                "  {p}:\n    post:\n      operationId: op\n      responses:\n        \"200\": {{ description: ok }}\n"
+            ));
+        }
+        let mut schemas_yaml = String::new();
+        for s in schemas {
+            schemas_yaml.push_str(&format!(
+                "    {s}:\n      type: object\n      properties:\n        name: {{ type: string }}\n"
+            ));
+        }
+        let spec = format!(
+            "openapi: \"3.0.0\"\ninfo: {{ title: Test, version: \"1.0\" }}\npaths:\n{paths_yaml}components:\n  schemas:\n{schemas_yaml}"
+        );
+        let path = dir.join(name);
+        fs::write(&path, spec).unwrap();
+        path
+    }
+
+    #[test]
+    fn diff_identical_specs_reports_no_changes() {
+        let dir = TempDir::new().unwrap();
+        let endpoints = &["/create", "/delete"];
+        let schemas = &["Foo"];
+        let old = write_spec(dir.path(), "old.yaml", endpoints, schemas);
+        let new = write_spec(dir.path(), "new.yaml", endpoints, schemas);
+        assert!(run(&old, &new).is_ok());
+    }
+
+    #[test]
+    fn diff_detects_added_endpoints() {
+        let dir = TempDir::new().unwrap();
+        let old = write_spec(dir.path(), "old.yaml", &["/a"], &["S"]);
+        let new = write_spec(dir.path(), "new.yaml", &["/a", "/b", "/c"], &["S"]);
+        assert!(run(&old, &new).is_ok());
+    }
+
+    #[test]
+    fn diff_detects_removed_endpoints() {
+        let dir = TempDir::new().unwrap();
+        let old = write_spec(dir.path(), "old.yaml", &["/a", "/b", "/c"], &["S"]);
+        let new = write_spec(dir.path(), "new.yaml", &["/a"], &["S"]);
+        assert!(run(&old, &new).is_ok());
+    }
+
+    #[test]
+    fn diff_detects_added_schemas() {
+        let dir = TempDir::new().unwrap();
+        let old = write_spec(dir.path(), "old.yaml", &["/a"], &["Alpha"]);
+        let new = write_spec(dir.path(), "new.yaml", &["/a"], &["Alpha", "Beta"]);
+        assert!(run(&old, &new).is_ok());
+    }
+
+    #[test]
+    fn diff_detects_removed_schemas() {
+        let dir = TempDir::new().unwrap();
+        let old = write_spec(dir.path(), "old.yaml", &["/a"], &["Alpha", "Beta"]);
+        let new = write_spec(dir.path(), "new.yaml", &["/a"], &["Alpha"]);
+        assert!(run(&old, &new).is_ok());
+    }
+
+    #[test]
+    fn diff_with_empty_paths_old() {
+        let dir = TempDir::new().unwrap();
+        let old_spec = "openapi: \"3.0.0\"\ninfo: { title: T, version: \"1.0\" }\npaths: {}\ncomponents:\n  schemas:\n    X:\n      type: object\n      properties:\n        a: { type: string }\n";
+        let old = dir.path().join("old.yaml");
+        fs::write(&old, old_spec).unwrap();
+        let new = write_spec(dir.path(), "new.yaml", &["/create"], &["X"]);
+        assert!(run(&old, &new).is_ok());
+    }
+
+    #[test]
+    fn diff_invalid_old_spec_returns_error() {
+        let dir = TempDir::new().unwrap();
+        let old = dir.path().join("old.yaml");
+        fs::write(&old, "not valid openapi yaml at all: ][").unwrap();
+        let new = write_spec(dir.path(), "new.yaml", &["/a"], &["S"]);
+        assert!(run(&old, &new).is_err());
+    }
+
+    #[test]
+    fn diff_nonexistent_file_returns_error() {
+        let dir = TempDir::new().unwrap();
+        let old = dir.path().join("nonexistent.yaml");
+        let new = write_spec(dir.path(), "new.yaml", &["/a"], &["S"]);
+        assert!(run(&old, &new).is_err());
+    }
+}
