@@ -78,6 +78,18 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7f202df86484c868dbad7eaa557ef785d5c66295e41b460ef922eca0723b842c"
 
 [[package]]
+name = "arrayref"
+version = "0.3.9"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "76a2e8124351fda1ef8aaaa3bbd7ebbcb486bbcd4225aca0aa0d84bb2db8fecb"
+
+[[package]]
+name = "arrayvec"
+version = "0.7.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7c02d123df017efcdfbd739ef81735b36c5ba83ec3c59c80a9d7ecc718f92e50"
+
+[[package]]
 name = "autocfg"
 version = "1.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -88,6 +100,20 @@ name = "bitflags"
 version = "2.11.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "843867be96c8daad0d758b57df9392b6d8d271134fce549de6ce169ff98a92af"
+
+[[package]]
+name = "blake3"
+version = "1.8.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0aa83c34e62843d924f905e0f5c866eb1dd6545fc4d719e803d9ba6030371fce"
+dependencies = [
+ "arrayref",
+ "arrayvec",
+ "cc",
+ "cfg-if",
+ "constant_time_eq",
+ "cpufeatures",
+]
 
 [[package]]
 name = "bumpalo"
@@ -180,20 +206,36 @@ dependencies = [
 ]
 
 [[package]]
+name = "constant_time_eq"
+version = "0.4.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3d52eff69cd5e647efe296129160853a42795992097e8af39800e1060caeea9b"
+
+[[package]]
 name = "core-foundation-sys"
 version = "0.8.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "773648b94d0e5d620f64f280777445740e61fe701025087ec8b57f45c791888b"
 
 [[package]]
+name = "cpufeatures"
+version = "0.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8b2a41393f66f16b0823bb79094d54ac5fbd34ab292ddafb9a0456ac9f87d201"
+dependencies = [
+ "libc",
+]
+
+[[package]]
 name = "crossplane-forge"
 version = "0.1.0"
-source = "git+https://github.com/pleme-io/crossplane-forge#7c1b9326a18200f8be31b53923cd0630dbbbde9a"
+source = "git+https://github.com/pleme-io/crossplane-forge#adf713d0c55eec05c660e8ad504a076c7ad41639"
 dependencies = [
  "iac-forge",
  "serde",
  "serde_json",
  "serde_yaml_ng",
+ "thiserror",
  "toml",
 ]
 
@@ -285,11 +327,14 @@ dependencies = [
 [[package]]
 name = "iac-forge"
 version = "0.1.0"
-source = "git+https://github.com/pleme-io/iac-forge#372986db2d4b57706d49a37cc0cda7fde2f83312"
+source = "git+https://github.com/pleme-io/iac-forge#15ec915f1a89fb0bc1b5ccb5dd37276e23cdc829"
 dependencies = [
+ "blake3",
+ "meimei",
  "openapi-forge",
  "serde",
  "serde_json",
+ "takumi",
  "thiserror",
  "toml",
 ]
@@ -406,6 +451,11 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5e5032e24019045c762d3c0f28f5b6b8bbf38563a65908389bf7978758920897"
 
 [[package]]
+name = "meimei"
+version = "0.1.0"
+source = "git+https://github.com/pleme-io/meimei#f911a3771cd2a3e8b8b266300aa25614099668ec"
+
+[[package]]
 name = "memchr"
 version = "2.8.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -435,12 +485,14 @@ checksum = "384b8ab6d37215f3c5301a95a4accb5d64aa607f1fcb26a11b5303878451b4fe"
 [[package]]
 name = "openapi-forge"
 version = "0.1.0"
-source = "git+https://github.com/pleme-io/openapi-forge#b6d578cce3cc26d90f2a8668a57763647bd7ac41"
+source = "git+https://github.com/pleme-io/openapi-forge#49e8a75082b88e2abcfb134c9904135b6cc3ab99"
 dependencies = [
  "indexmap",
+ "sekkei",
  "serde",
  "serde_json",
  "serde_yaml_ng",
+ "takumi",
  "thiserror",
 ]
 
@@ -522,6 +574,17 @@ name = "ryu"
 version = "1.0.23"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9774ba4a74de5f7b1c1451ed6cd5285a32eddb5cccb8cc655a4e50009e06477f"
+
+[[package]]
+name = "sekkei"
+version = "0.1.0"
+source = "git+https://github.com/pleme-io/sekkei#106a048a5ce07cd098583a1bd5987116c71a0160"
+dependencies = [
+ "serde",
+ "serde_json",
+ "serde_yaml_ng",
+ "thiserror",
+]
 
 [[package]]
 name = "semver"
@@ -625,6 +688,17 @@ dependencies = [
  "proc-macro2",
  "quote",
  "unicode-ident",
+]
+
+[[package]]
+name = "takumi"
+version = "0.1.0"
+source = "git+https://github.com/pleme-io/takumi#604319f1546fd9aa9675fd760814cf048395afac"
+dependencies = [
+ "indexmap",
+ "sekkei",
+ "serde",
+ "serde_json",
 ]
 
 [[package]]
