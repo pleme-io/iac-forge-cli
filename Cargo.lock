@@ -229,7 +229,7 @@ dependencies = [
 [[package]]
 name = "crossplane-forge"
 version = "0.1.0"
-source = "git+https://github.com/pleme-io/crossplane-forge#7ea0e106c375fe3603c406133ed7cc55eb08ab5d"
+source = "git+https://github.com/pleme-io/crossplane-forge#b1e8a78263b31afbd8439cc9d5239d7169067420"
 dependencies = [
  "iac-forge",
  "serde",
