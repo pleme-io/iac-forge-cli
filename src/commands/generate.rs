@@ -148,6 +148,7 @@ pub fn run(
         generate_for_backend(
             target,
             &api,
+            spec_path,
             &provider_spec,
             &iac_provider,
             &iac_resources,
@@ -175,6 +176,7 @@ pub fn run(
 fn generate_for_backend(
     backend: &BackendChoice,
     api: &Spec,
+    spec_path: &Path,
     provider_spec: &ProviderSpec,
     iac_provider: &iac_forge::IacProvider,
     iac_resources: &[iac_forge::IacResource],
@@ -216,8 +218,22 @@ fn generate_for_backend(
             #[cfg(feature = "crossplane")]
             {
                 let _ = (api, provider_spec, resource_files);
+                // M6.4 — load OpenAPI body schemas so the controller
+                // emitter can filter forProvider field pushes by
+                // SDK-name+type match. Failure is non-fatal: fall
+                // back to identifier+token-only bodies (substrate
+                // still compiles cleanly without the broad walk).
+                let body_sigs = match crossplane_forge::body_signatures::BodySigMap::from_openapi_json_path(spec_path) {
+                    Ok(map) => Some(std::sync::Arc::new(map)),
+                    Err(e) => {
+                        eprintln!("warning: M6.4 body signature load failed ({e}); falling back to opt-in mode");
+                        None
+                    }
+                };
+                let backend = crossplane_forge::CrossplaneBackend::default()
+                    .with_body_sigs(body_sigs);
                 generate_via_backend(
-                    &crossplane_forge::CrossplaneBackend,
+                    &backend,
                     iac_provider,
                     iac_resources,
                     iac_data_sources,
@@ -226,7 +242,7 @@ fn generate_for_backend(
             }
             #[cfg(not(feature = "crossplane"))]
             {
-                let _ = (api, provider_spec, iac_provider, iac_resources, iac_data_sources, resource_files, output_dir);
+                let _ = (api, spec_path, provider_spec, iac_provider, iac_resources, iac_data_sources, resource_files, output_dir);
                 Err("crossplane backend not yet available — crossplane-forge crate pending".into())
             }
         }
