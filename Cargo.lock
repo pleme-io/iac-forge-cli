@@ -14,7 +14,7 @@ dependencies = [
 [[package]]
 name = "ansible-forge"
 version = "0.1.0"
-source = "git+https://github.com/pleme-io/ansible-forge#029f49f5262e827238f9b76c8123a3c4f8876e0f"
+source = "git+https://github.com/pleme-io/ansible-forge#99236f94f17e15dc33a7358f99cebb47cd50c8a6"
 dependencies = [
  "iac-forge",
  "serde",
