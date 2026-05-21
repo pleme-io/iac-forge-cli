@@ -1,0 +1,17 @@
+name: release-binaries
+
+# Thin wrapper around substrate/.github/workflows/rust-binary-release.yml.
+# On every `v*` tag push, build the iac-forge binary for 4 platforms and
+# attach it to the GitHub Release that softprops/action-gh-release creates.
+
+on:
+  push:
+    tags: ['v*']
+
+jobs:
+  binaries:
+    uses: pleme-io/substrate/.github/workflows/rust-binary-release.yml@main
+    with:
+      binary-name: iac-forge
+      features: ansible
+      no-default-features: true
