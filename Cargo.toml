@@ -19,14 +19,17 @@ path = "src/main.rs"
 pedantic = "warn"
 
 [features]
-default = ["terraform", "pulumi", "crossplane", "ansible", "pangea", "steampipe", "helm"]
+default = ["terraform", "pulumi", "crossplane", "ansible", "steampipe", "helm"]
 terraform = ["dep:terraform-forge"]
 pulumi = ["dep:pulumi-forge"]
 crossplane = ["dep:crossplane-forge"]
 ansible = ["dep:ansible-forge"]
-pangea = ["dep:pangea-forge"]
 steampipe = ["dep:steampipe-forge"]
 helm = ["dep:helm-forge"]
+# `pangea` feature removed: pangea-forge is a private repo with a missing
+# `arch-synthesizer` transitive dep; cargo can't resolve it from public CI
+# runners and it's been broken upstream for the duration of this release
+# train. Restore once pangea-forge is reachable + buildable.
 
 [dependencies]
 openapi-forge = { git = "https://github.com/pleme-io/openapi-forge" }
@@ -35,7 +38,6 @@ terraform-forge = { git = "https://github.com/pleme-io/terraform-forge", optiona
 pulumi-forge = { git = "https://github.com/pleme-io/pulumi-forge", optional = true }
 crossplane-forge = { git = "https://github.com/pleme-io/crossplane-forge", optional = true }
 ansible-forge = { git = "https://github.com/pleme-io/ansible-forge", optional = true }
-pangea-forge = { git = "https://github.com/pleme-io/pangea-forge", optional = true }
 steampipe-forge = { git = "https://github.com/pleme-io/steampipe-forge", optional = true }
 helm-forge = { git = "https://github.com/pleme-io/helm-forge", optional = true }
 chrono = "0.4"

@@ -13,9 +13,12 @@ jobs:
     uses: pleme-io/substrate/.github/workflows/rust-binary-release.yml@main
     with:
       binary-name: iac-forge
-      # All in-house backends except `pangea` (its upstream `arch-synthesizer`
-      # transitive dep is broken — separate org issue tracked elsewhere). The
-      # `pleme-io/actions/iac-forge` action accepts any of these via its
-      # `backend:` input, so the published binary must support them all.
-      features: terraform,pulumi,crossplane,ansible,steampipe,helm
+      # Ansible-only first release. The other sibling forges (helm-forge,
+      # pulumi-forge, etc.) currently have upstream compile errors against
+      # the latest iac-forge IR variants (non-exhaustive IacType handling)
+      # and pangea-forge is private + has an unreachable transitive dep.
+      # The pleme-io/actions/iac-forge action's `backend:` input accepts
+      # all values but the binary only honors `ansible` until the sibling
+      # forges are fixed and this `features:` list is broadened.
+      features: ansible
       no-default-features: true
