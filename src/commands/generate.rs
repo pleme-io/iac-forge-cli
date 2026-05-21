@@ -2,7 +2,10 @@ use std::fs;
 use std::path::Path;
 
 use colored::Colorize;
-use iac_forge::{Backend, DataSourceSpec, ProviderSpec, ResourceSpec, resolve_data_source, resolve_provider, resolve_resource};
+use iac_forge::{
+    Backend, DataSourceSpec, ProviderSpec, ResourceSpec, resolve_action, resolve_data_source,
+    resolve_provider, resolve_resource,
+};
 use openapi_forge::Spec;
 
 use crate::BackendChoice;
@@ -52,8 +55,11 @@ pub fn run(
         resource_files.len()
     );
 
-    // Resolve all resources to platform-independent IR
+    // Resolve all resources to platform-independent IR. Action-style specs
+    // (kind = "action") branch into iac_actions; the existing CRUD path is
+    // unchanged.
     let mut iac_resources = Vec::new();
+    let mut iac_actions = Vec::new();
     let mut skipped = 0;
 
     for file in &resource_files {
@@ -62,6 +68,20 @@ pub fn run(
         if let Err(e) = resource.validate(&api) {
             eprintln!("{} {}: {e}", "warning:".yellow().bold(), file.display());
             skipped += 1;
+            continue;
+        }
+
+        if resource.is_action() {
+            match resolve_action(&resource, &api, &provider_spec.defaults) {
+                Ok(iac_action) => {
+                    println!("  {} Resolved action {}", "->".green(), iac_action.name);
+                    iac_actions.push(iac_action);
+                }
+                Err(e) => {
+                    eprintln!("{} {}: {e}", "warning:".yellow().bold(), file.display());
+                    skipped += 1;
+                }
+            }
             continue;
         }
 
@@ -153,6 +173,7 @@ pub fn run(
             &iac_provider,
             &iac_resources,
             &iac_data_sources,
+            &iac_actions,
             &resource_files,
             &target_dir,
         )?;
@@ -163,8 +184,13 @@ pub fn run(
     } else {
         format!(" + {} data source(s)", iac_data_sources.len())
     };
+    let action_msg = if iac_actions.is_empty() {
+        String::new()
+    } else {
+        format!(" + {} action(s)", iac_actions.len())
+    };
     println!(
-        "\n{} Generated artifacts for {} resource(s){ds_msg} with backend: {}",
+        "\n{} Generated artifacts for {} resource(s){ds_msg}{action_msg} with backend: {}",
         "done".green().bold(),
         iac_resources.len(),
         backend,
@@ -181,6 +207,7 @@ fn generate_for_backend(
     iac_provider: &iac_forge::IacProvider,
     iac_resources: &[iac_forge::IacResource],
     iac_data_sources: &[iac_forge::IacDataSource],
+    iac_actions: &[iac_forge::IacAction],
     resource_files: &[std::path::PathBuf],
     output_dir: &Path,
 ) -> Result<(), Box<dyn std::error::Error>> {
@@ -188,11 +215,19 @@ fn generate_for_backend(
         BackendChoice::Terraform => {
             #[cfg(feature = "terraform")]
             {
+                // Terraform path doesn't model actions yet; warn and skip.
+                if !iac_actions.is_empty() {
+                    eprintln!(
+                        "{} terraform backend: skipping {} action(s) (no action codegen yet)",
+                        "warning:".yellow().bold(),
+                        iac_actions.len()
+                    );
+                }
                 generate_terraform(api, provider_spec, iac_provider, iac_resources, iac_data_sources, resource_files, output_dir)
             }
             #[cfg(not(feature = "terraform"))]
             {
-                let _ = (api, provider_spec, iac_provider, iac_resources, iac_data_sources, resource_files, output_dir);
+                let _ = (api, provider_spec, iac_provider, iac_resources, iac_data_sources, iac_actions, resource_files, output_dir);
                 Err("terraform backend not compiled in — enable the 'terraform' feature".into())
             }
         }
@@ -205,12 +240,13 @@ fn generate_for_backend(
                     iac_provider,
                     iac_resources,
                     iac_data_sources,
+                    iac_actions,
                     output_dir,
                 )
             }
             #[cfg(not(feature = "pulumi"))]
             {
-                let _ = (api, provider_spec, iac_provider, iac_resources, iac_data_sources, resource_files, output_dir);
+                let _ = (api, provider_spec, iac_provider, iac_resources, iac_data_sources, iac_actions, resource_files, output_dir);
                 Err("pulumi backend not yet available — pulumi-forge crate pending".into())
             }
         }
@@ -237,12 +273,13 @@ fn generate_for_backend(
                     iac_provider,
                     iac_resources,
                     iac_data_sources,
+                    iac_actions,
                     output_dir,
                 )
             }
             #[cfg(not(feature = "crossplane"))]
             {
-                let _ = (api, spec_path, provider_spec, iac_provider, iac_resources, iac_data_sources, resource_files, output_dir);
+                let _ = (api, spec_path, provider_spec, iac_provider, iac_resources, iac_data_sources, iac_actions, resource_files, output_dir);
                 Err("crossplane backend not yet available — crossplane-forge crate pending".into())
             }
         }
@@ -255,12 +292,13 @@ fn generate_for_backend(
                     iac_provider,
                     iac_resources,
                     iac_data_sources,
+                    iac_actions,
                     output_dir,
                 )
             }
             #[cfg(not(feature = "ansible"))]
             {
-                let _ = (api, provider_spec, iac_provider, iac_resources, iac_data_sources, resource_files, output_dir);
+                let _ = (api, provider_spec, iac_provider, iac_resources, iac_data_sources, iac_actions, resource_files, output_dir);
                 Err("ansible backend not yet available — ansible-forge crate pending".into())
             }
         }
@@ -273,12 +311,13 @@ fn generate_for_backend(
                     iac_provider,
                     iac_resources,
                     iac_data_sources,
+                    iac_actions,
                     output_dir,
                 )
             }
             #[cfg(not(feature = "pangea"))]
             {
-                let _ = (api, provider_spec, iac_provider, iac_resources, iac_data_sources, resource_files, output_dir);
+                let _ = (api, provider_spec, iac_provider, iac_resources, iac_data_sources, iac_actions, resource_files, output_dir);
                 Err("pangea backend not yet available — pangea-forge crate pending".into())
             }
         }
@@ -291,12 +330,13 @@ fn generate_for_backend(
                     iac_provider,
                     iac_resources,
                     iac_data_sources,
+                    iac_actions,
                     output_dir,
                 )
             }
             #[cfg(not(feature = "steampipe"))]
             {
-                let _ = (api, provider_spec, iac_provider, iac_resources, iac_data_sources, resource_files, output_dir);
+                let _ = (api, provider_spec, iac_provider, iac_resources, iac_data_sources, iac_actions, resource_files, output_dir);
                 Err("steampipe backend not compiled in — enable the 'steampipe' feature".into())
             }
         }
@@ -309,12 +349,13 @@ fn generate_for_backend(
                     iac_provider,
                     iac_resources,
                     iac_data_sources,
+                    iac_actions,
                     output_dir,
                 )
             }
             #[cfg(not(feature = "helm"))]
             {
-                let _ = (api, provider_spec, iac_provider, iac_resources, iac_data_sources, resource_files, output_dir);
+                let _ = (api, provider_spec, iac_provider, iac_resources, iac_data_sources, iac_actions, resource_files, output_dir);
                 Err("helm backend not compiled in — enable the 'helm' feature".into())
             }
         }
@@ -329,11 +370,13 @@ fn generate_via_backend(
     iac_provider: &iac_forge::IacProvider,
     iac_resources: &[iac_forge::IacResource],
     iac_data_sources: &[iac_forge::IacDataSource],
+    iac_actions: &[iac_forge::IacAction],
     output_dir: &Path,
 ) -> Result<(), Box<dyn std::error::Error>> {
     fs::create_dir_all(output_dir)?;
 
     let mut artifact_count = 0;
+    let mut action_count = 0;
 
     for resource in iac_resources {
         let artifacts = backend.generate_resource(resource, iac_provider)?;
@@ -372,6 +415,21 @@ fn generate_via_backend(
         }
     }
 
+    // Generate action artifacts (Phase 1.5 — action-style RPC modules).
+    for action in iac_actions {
+        let artifacts = backend.generate_action(action, iac_provider)?;
+        for artifact in &artifacts {
+            let out_path = output_dir.join(&artifact.path);
+            if let Some(parent) = out_path.parent() {
+                fs::create_dir_all(parent)?;
+            }
+            fs::write(&out_path, &artifact.content)?;
+            println!("  {} {}", "->".green(), artifact.path);
+            artifact_count += 1;
+            action_count += 1;
+        }
+    }
+
     // Generate provider-level artifacts
     let provider_artifacts =
         backend.generate_provider(iac_provider, iac_resources, iac_data_sources)?;
@@ -386,8 +444,10 @@ fn generate_via_backend(
     }
 
     println!(
-        "  {} {} artifacts written",
+        "  {} {} artifacts written ({} action artifact(s) out of {})",
         "=>".blue().bold(),
+        artifact_count,
+        action_count,
         artifact_count
     );
 

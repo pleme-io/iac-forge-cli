@@ -14,7 +14,7 @@ dependencies = [
 [[package]]
 name = "ansible-forge"
 version = "0.1.0"
-source = "git+https://github.com/pleme-io/ansible-forge#97f3adc60a057c377254dce3f8c06d273643bf3a"
+source = "git+https://github.com/pleme-io/ansible-forge#db0acbbac59c011120adf69384c1e502a44575e4"
 dependencies = [
  "iac-forge",
  "serde",
@@ -327,7 +327,7 @@ dependencies = [
 [[package]]
 name = "iac-forge"
 version = "0.1.0"
-source = "git+https://github.com/pleme-io/iac-forge#15ec915f1a89fb0bc1b5ccb5dd37276e23cdc829"
+source = "git+https://github.com/pleme-io/iac-forge#4d7746648c42de8fd9d039adc04c570e395cefaf"
 dependencies = [
  "blake3",
  "meimei",
@@ -453,7 +453,7 @@ checksum = "5e5032e24019045c762d3c0f28f5b6b8bbf38563a65908389bf7978758920897"
 [[package]]
 name = "meimei"
 version = "0.1.0"
-source = "git+https://github.com/pleme-io/meimei#f911a3771cd2a3e8b8b266300aa25614099668ec"
+source = "git+https://github.com/pleme-io/meimei#419190adc489a1da8ff89aea6ef2a6fe399b0e92"
 
 [[package]]
 name = "memchr"
@@ -485,7 +485,7 @@ checksum = "384b8ab6d37215f3c5301a95a4accb5d64aa607f1fcb26a11b5303878451b4fe"
 [[package]]
 name = "openapi-forge"
 version = "0.1.0"
-source = "git+https://github.com/pleme-io/openapi-forge#49e8a75082b88e2abcfb134c9904135b6cc3ab99"
+source = "git+https://github.com/pleme-io/openapi-forge#ce6507e6175af7aa421b8552d04685aa43b5d5fa"
 dependencies = [
  "indexmap",
  "sekkei",
@@ -578,7 +578,7 @@ checksum = "9774ba4a74de5f7b1c1451ed6cd5285a32eddb5cccb8cc655a4e50009e06477f"
 [[package]]
 name = "sekkei"
 version = "0.1.0"
-source = "git+https://github.com/pleme-io/sekkei#106a048a5ce07cd098583a1bd5987116c71a0160"
+source = "git+https://github.com/pleme-io/sekkei#f76a1be65b4ca542e8c9f4ff21dc56d3fd5ff752"
 dependencies = [
  "serde",
  "serde_json",
@@ -693,7 +693,7 @@ dependencies = [
 [[package]]
 name = "takumi"
 version = "0.1.0"
-source = "git+https://github.com/pleme-io/takumi#604319f1546fd9aa9675fd760814cf048395afac"
+source = "git+https://github.com/pleme-io/takumi#cf8a93b06d9407bd23f26afa76fc04b37fa1bf4b"
 dependencies = [
  "indexmap",
  "sekkei",
