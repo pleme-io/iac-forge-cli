@@ -14,11 +14,12 @@ dependencies = [
 [[package]]
 name = "ansible-forge"
 version = "0.1.0"
-source = "git+https://github.com/pleme-io/ansible-forge#db0acbbac59c011120adf69384c1e502a44575e4"
+source = "git+https://github.com/pleme-io/ansible-forge#029f49f5262e827238f9b76c8123a3c4f8876e0f"
 dependencies = [
  "iac-forge",
  "serde",
  "serde_json",
+ "toml",
 ]
 
 [[package]]
@@ -327,7 +328,7 @@ dependencies = [
 [[package]]
 name = "iac-forge"
 version = "0.1.0"
-source = "git+https://github.com/pleme-io/iac-forge#4d7746648c42de8fd9d039adc04c570e395cefaf"
+source = "git+https://github.com/pleme-io/iac-forge#c8aa7683cebf83a41f798e8e67dcf2c0c2aa7b64"
 dependencies = [
  "blake3",
  "meimei",
