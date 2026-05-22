@@ -810,11 +810,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1779423319,
-        "narHash": "sha256-31kIzoILXDfz2OOyCuXyKDPoPNKgIQKfy2h0wSpp1Ao=",
+        "lastModified": 1779425145,
+        "narHash": "sha256-erSx9cx91wVJPGB1UShQFx7s4qYegFuw9riocsJiah8=",
         "owner": "pleme-io",
         "repo": "forge",
-        "rev": "174155aed70a01012a363eacbe6d82538de30c77",
+        "rev": "6a25969aa398e8e838239a0f8d118f6c4b821f46",
         "type": "github"
       },
       "original": {
