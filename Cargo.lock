@@ -14,7 +14,7 @@ dependencies = [
 [[package]]
 name = "ansible-forge"
 version = "0.1.1"
-source = "git+https://github.com/pleme-io/ansible-forge#261fb0dd57383a3b1b2e39c52370d3d268fcf3e3"
+source = "git+https://github.com/pleme-io/ansible-forge#24a3ed6972b4bc14ea7bec3afd47eecbcfda05ae"
 dependencies = [
  "iac-forge",
  "serde",
@@ -230,7 +230,7 @@ dependencies = [
 [[package]]
 name = "crossplane-forge"
 version = "0.1.0"
-source = "git+https://github.com/pleme-io/crossplane-forge#26452f0537a76df720bf9e0c8625544e6feab2c9"
+source = "git+https://github.com/pleme-io/crossplane-forge#96a6a2c1f13875e4a4be3ce6c312962048b08449"
 dependencies = [
  "iac-forge",
  "serde",
@@ -341,7 +341,7 @@ checksum = "2304e00983f87ffb38b55b444b5e3b60a884b5d30c0fca7d82fe33449bbe55ea"
 [[package]]
 name = "helm-forge"
 version = "0.1.0"
-source = "git+https://github.com/pleme-io/helm-forge#13f2e53d68532afacd61f1b7a2980a320e7fe0a8"
+source = "git+https://github.com/pleme-io/helm-forge#8c9f33eb5832d320bf52cf42857c01c7c61e8293"
 dependencies = [
  "iac-forge",
  "serde",
@@ -352,7 +352,7 @@ dependencies = [
 [[package]]
 name = "iac-forge"
 version = "0.1.0"
-source = "git+https://github.com/pleme-io/iac-forge#e5920ee984339e1aad319b0929a0afc8f2be26e1"
+source = "git+https://github.com/pleme-io/iac-forge#c592b447755b62f9c3c7c5181cdd7b4508cae3df"
 dependencies = [
  "blake3",
  "meimei",
@@ -478,8 +478,8 @@ checksum = "616ec5685824bcc94416c6d4a7a446eea774a31efd7062c8480ba6fd06d7a6e5"
 
 [[package]]
 name = "meimei"
-version = "0.1.0"
-source = "git+https://github.com/pleme-io/meimei#ba236e7134887a1a3233c4bf96e8e659341eb658"
+version = "0.1.1"
+source = "git+https://github.com/pleme-io/meimei#a3865aca03012893719fa4d093e20de4065fa58b"
 
 [[package]]
 name = "memchr"
@@ -510,8 +510,8 @@ checksum = "384b8ab6d37215f3c5301a95a4accb5d64aa607f1fcb26a11b5303878451b4fe"
 
 [[package]]
 name = "openapi-forge"
-version = "0.1.1"
-source = "git+https://github.com/pleme-io/openapi-forge#585b21fc0812fb65103b1903fa75cc0d67ec1cae"
+version = "0.1.2"
+source = "git+https://github.com/pleme-io/openapi-forge#9effae90178365cfb60faa804a73c4d31ddb3143"
 dependencies = [
  "indexmap",
  "sekkei",
@@ -549,8 +549,8 @@ dependencies = [
 
 [[package]]
 name = "pulumi-forge"
-version = "0.1.0"
-source = "git+https://github.com/pleme-io/pulumi-forge#b30e037b257071041151793a83dd95882a44bbbb"
+version = "0.1.2"
+source = "git+https://github.com/pleme-io/pulumi-forge#b7f54f2797294c040a3e4d1d931b2e0fe6049dd8"
 dependencies = [
  "iac-forge",
  "serde",
@@ -599,8 +599,8 @@ checksum = "9774ba4a74de5f7b1c1451ed6cd5285a32eddb5cccb8cc655a4e50009e06477f"
 
 [[package]]
 name = "sekkei"
-version = "0.1.0"
-source = "git+https://github.com/pleme-io/sekkei#52f2ab0650e26fd931ea15fc48bb246dda1d200e"
+version = "0.1.1"
+source = "git+https://github.com/pleme-io/sekkei#96512bcc418f61918f7d1c7c8e9ea125cdf44d3f"
 dependencies = [
  "serde",
  "serde_json",
@@ -693,8 +693,8 @@ checksum = "0c790de23124f9ab44544d7ac05d60440adc586479ce501c1d6d7da3cd8c9cf5"
 
 [[package]]
 name = "steampipe-forge"
-version = "0.1.1"
-source = "git+https://github.com/pleme-io/steampipe-forge#d2d56e08ae5ee21edfc6a359f559a042fe20083c"
+version = "0.1.2"
+source = "git+https://github.com/pleme-io/steampipe-forge#ede6605961ca1f0ff3dcd3a84ea24564780e867e"
 dependencies = [
  "iac-forge",
  "serde",
@@ -721,7 +721,7 @@ dependencies = [
 [[package]]
 name = "takumi"
 version = "0.1.0"
-source = "git+https://github.com/pleme-io/takumi#9a9c47331f99f0c2abc6ca820f4e53d37f96fd44"
+source = "git+https://github.com/pleme-io/takumi#a7083802a52bf55813b4941579c269fc8d604329"
 dependencies = [
  "indexmap",
  "sekkei",
@@ -744,8 +744,8 @@ dependencies = [
 
 [[package]]
 name = "terraform-forge"
-version = "0.1.1"
-source = "git+https://github.com/pleme-io/terraform-forge#eeeb5f682dcd72da8eb12f407f2cbe1e114628d5"
+version = "0.1.2"
+source = "git+https://github.com/pleme-io/terraform-forge#cabce361f0823b61dbc5cd3f143a5f1c1b13d891"
 dependencies = [
  "iac-forge",
  "indexmap",
