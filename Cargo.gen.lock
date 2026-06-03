@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "cargo_lock_sha256": "b48f9a1432c1124571ee0ba5fabafa57ce4ef2061e356b0d87678846834dadca",
+  "cargo_lock_sha256": "13817d8a7d0d4c5ab785ec5635fec8fd306f588ab10c2efab9d8103c232771e5",
   "target_resolves": {
     "base": {
-      "ansible-forge-0.1.1": {
+      "ansible-forge-0.1.2": {
         "runtime_dependencies": [
           {
             "name": "iac_forge",
@@ -168,14 +168,14 @@
         "build_dependencies": [],
         "features": []
       },
-      "bitflags-2.11.1": {
+      "bitflags-2.12.1": {
         "runtime_dependencies": [],
         "build_dependencies": [],
         "features": [
           "std"
         ]
       },
-      "cc-1.2.62": {
+      "cc-1.2.63": {
         "runtime_dependencies": [
           {
             "name": "find_msvc_tools",
@@ -189,7 +189,7 @@
           },
           {
             "name": "shlex",
-            "package_key": "shlex-1.3.0",
+            "package_key": "shlex-2.0.1",
             "kind": "normal",
             "features": [],
             "uses_default_features": true,
@@ -713,7 +713,7 @@
           },
           {
             "name": "openapi_forge",
-            "package_key": "openapi-forge-0.1.2",
+            "package_key": "openapi-forge-0.1.3",
             "kind": "normal",
             "features": [],
             "uses_default_features": true,
@@ -779,11 +779,11 @@
           "default"
         ]
       },
-      "iac-forge-cli-0.1.1": {
+      "iac-forge-cli-0.1.2": {
         "runtime_dependencies": [
           {
             "name": "ansible_forge",
-            "package_key": "ansible-forge-0.1.1",
+            "package_key": "ansible-forge-0.1.2",
             "kind": "normal",
             "features": [],
             "uses_default_features": true,
@@ -865,7 +865,7 @@
           },
           {
             "name": "openapi_forge",
-            "package_key": "openapi-forge-0.1.2",
+            "package_key": "openapi-forge-0.1.3",
             "kind": "normal",
             "features": [],
             "uses_default_features": true,
@@ -875,7 +875,7 @@
           },
           {
             "name": "pulumi_forge",
-            "package_key": "pulumi-forge-0.1.2",
+            "package_key": "pulumi-forge-0.1.3",
             "kind": "normal",
             "features": [],
             "uses_default_features": true,
@@ -907,7 +907,7 @@
           },
           {
             "name": "steampipe_forge",
-            "package_key": "steampipe-forge-0.1.2",
+            "package_key": "steampipe-forge-0.1.3",
             "kind": "normal",
             "features": [],
             "uses_default_features": true,
@@ -917,7 +917,7 @@
           },
           {
             "name": "terraform_forge",
-            "package_key": "terraform-forge-0.1.2",
+            "package_key": "terraform-forge-0.1.3",
             "kind": "normal",
             "features": [],
             "uses_default_features": true,
@@ -1012,7 +1012,7 @@
         "build_dependencies": [],
         "features": []
       },
-      "memchr-2.8.0": {
+      "memchr-2.8.1": {
         "runtime_dependencies": [],
         "build_dependencies": [],
         "features": [
@@ -1045,7 +1045,7 @@
           "std"
         ]
       },
-      "openapi-forge-0.1.2": {
+      "openapi-forge-0.1.3": {
         "runtime_dependencies": [
           {
             "name": "indexmap",
@@ -1144,7 +1144,7 @@
           "proc-macro"
         ]
       },
-      "pulumi-forge-0.1.2": {
+      "pulumi-forge-0.1.3": {
         "runtime_dependencies": [
           {
             "name": "iac_forge",
@@ -1357,7 +1357,7 @@
           },
           {
             "name": "memchr",
-            "package_key": "memchr-2.8.0",
+            "package_key": "memchr-2.8.1",
             "kind": "normal",
             "features": [],
             "uses_default_features": false,
@@ -1466,7 +1466,7 @@
         "build_dependencies": [],
         "features": []
       },
-      "shlex-1.3.0": {
+      "shlex-2.0.1": {
         "runtime_dependencies": [],
         "build_dependencies": [],
         "features": [
@@ -1474,7 +1474,7 @@
           "std"
         ]
       },
-      "steampipe-forge-0.1.2": {
+      "steampipe-forge-0.1.3": {
         "runtime_dependencies": [
           {
             "name": "iac_forge",
@@ -1667,7 +1667,7 @@
           "getrandom"
         ]
       },
-      "terraform-forge-0.1.2": {
+      "terraform-forge-0.1.3": {
         "runtime_dependencies": [
           {
             "name": "iac_forge",
@@ -1703,7 +1703,7 @@
           },
           {
             "name": "openapi_forge",
-            "package_key": "openapi-forge-0.1.2",
+            "package_key": "openapi-forge-0.1.3",
             "kind": "normal",
             "features": [],
             "uses_default_features": true,
@@ -1990,7 +1990,7 @@
         "runtime_dependencies": [
           {
             "name": "memchr",
-            "package_key": "memchr-2.8.0",
+            "package_key": "memchr-2.8.1",
             "kind": "normal",
             "features": [],
             "uses_default_features": false,
@@ -2061,7 +2061,7 @@
             "build_dependencies": [
               {
                 "name": "cc",
-                "package_key": "cc-1.2.62",
+                "package_key": "cc-1.2.63",
                 "kind": "build",
                 "features": [],
                 "uses_default_features": true,
@@ -2105,7 +2105,7 @@
             "runtime_dependencies": [
               {
                 "name": "bitflags",
-                "package_key": "bitflags-2.11.1",
+                "package_key": "bitflags-2.12.1",
                 "kind": "normal",
                 "features": [],
                 "uses_default_features": false,
@@ -2232,7 +2232,7 @@
             "build_dependencies": [
               {
                 "name": "cc",
-                "package_key": "cc-1.2.62",
+                "package_key": "cc-1.2.63",
                 "kind": "build",
                 "features": [],
                 "uses_default_features": true,
@@ -2281,7 +2281,7 @@
             "runtime_dependencies": [
               {
                 "name": "bitflags",
-                "package_key": "bitflags-2.11.1",
+                "package_key": "bitflags-2.12.1",
                 "kind": "normal",
                 "features": [],
                 "uses_default_features": false,
@@ -2408,7 +2408,7 @@
             "build_dependencies": [
               {
                 "name": "cc",
-                "package_key": "cc-1.2.62",
+                "package_key": "cc-1.2.63",
                 "kind": "build",
                 "features": [],
                 "uses_default_features": true,
@@ -2450,7 +2450,7 @@
             "runtime_dependencies": [
               {
                 "name": "bitflags",
-                "package_key": "bitflags-2.11.1",
+                "package_key": "bitflags-2.12.1",
                 "kind": "normal",
                 "features": [],
                 "uses_default_features": false,
@@ -2597,7 +2597,7 @@
             "build_dependencies": [
               {
                 "name": "cc",
-                "package_key": "cc-1.2.62",
+                "package_key": "cc-1.2.63",
                 "kind": "build",
                 "features": [],
                 "uses_default_features": true,
@@ -2639,7 +2639,7 @@
             "runtime_dependencies": [
               {
                 "name": "bitflags",
-                "package_key": "bitflags-2.11.1",
+                "package_key": "bitflags-2.12.1",
                 "kind": "normal",
                 "features": [],
                 "uses_default_features": false,
@@ -2776,7 +2776,7 @@
             "build_dependencies": [
               {
                 "name": "cc",
-                "package_key": "cc-1.2.62",
+                "package_key": "cc-1.2.63",
                 "kind": "build",
                 "features": [],
                 "uses_default_features": true,
@@ -2813,7 +2813,7 @@
             "runtime_dependencies": [
               {
                 "name": "bitflags",
-                "package_key": "bitflags-2.11.1",
+                "package_key": "bitflags-2.12.1",
                 "kind": "normal",
                 "features": [],
                 "uses_default_features": false,
@@ -2950,7 +2950,7 @@
             "build_dependencies": [
               {
                 "name": "cc",
-                "package_key": "cc-1.2.62",
+                "package_key": "cc-1.2.63",
                 "kind": "build",
                 "features": [],
                 "uses_default_features": true,
@@ -2987,7 +2987,7 @@
             "runtime_dependencies": [
               {
                 "name": "bitflags",
-                "package_key": "bitflags-2.11.1",
+                "package_key": "bitflags-2.12.1",
                 "kind": "normal",
                 "features": [],
                 "uses_default_features": false,
@@ -3079,7 +3079,7 @@
     }
   },
   "per_crate": {
-    "ansible-forge-0.1.1": {
+    "ansible-forge-0.1.2": {
       "edition": "2024"
     },
     "anstream-1.0.0": {
@@ -3103,14 +3103,14 @@
     "autocfg-1.5.1": {
       "edition": "2015"
     },
-    "bitflags-2.11.1": {
+    "bitflags-2.12.1": {
       "edition": "2021"
     },
     "blake3-1.8.5": {
       "edition": "2024",
       "build_script": "build.rs"
     },
-    "cc-1.2.62": {
+    "cc-1.2.63": {
       "edition": "2018"
     },
     "cfg-if-1.0.4": {
@@ -3147,8 +3147,8 @@
     "constant_time_eq-0.4.2": {
       "edition": "2024"
     },
-    "core-foundation-sys-0.8.7": {
-      "edition": "2018"
+    "cpufeatures-0.3.0": {
+      "edition": "2024"
     },
     "crossplane-forge-0.1.0": {
       "edition": "2024"
@@ -3184,7 +3184,7 @@
     "iac-forge-0.1.0": {
       "edition": "2024"
     },
-    "iac-forge-cli-0.1.1": {
+    "iac-forge-cli-0.1.2": {
       "edition": "2024",
       "binaries": [
         {
@@ -3209,10 +3209,13 @@
       "edition": "2021",
       "build_script": "build.rs"
     },
+    "linux-raw-sys-0.12.1": {
+      "edition": "2021"
+    },
     "meimei-0.1.1": {
       "edition": "2024"
     },
-    "memchr-2.8.0": {
+    "memchr-2.8.1": {
       "edition": "2021"
     },
     "num-traits-0.2.19": {
@@ -3222,14 +3225,14 @@
     "once_cell-1.21.4": {
       "edition": "2021"
     },
-    "openapi-forge-0.1.2": {
+    "openapi-forge-0.1.3": {
       "edition": "2024"
     },
     "proc-macro2-1.0.106": {
       "edition": "2021",
       "build_script": "build.rs"
     },
-    "pulumi-forge-0.1.2": {
+    "pulumi-forge-0.1.3": {
       "edition": "2024"
     },
     "quote-1.0.45": {
@@ -3268,10 +3271,10 @@
     "serde_yaml_ng-0.10.0": {
       "edition": "2021"
     },
-    "shlex-1.3.0": {
-      "edition": "2015"
+    "shlex-2.0.1": {
+      "edition": "2018"
     },
-    "steampipe-forge-0.1.2": {
+    "steampipe-forge-0.1.3": {
       "edition": "2024"
     },
     "strsim-0.11.1": {
@@ -3286,7 +3289,7 @@
     "tempfile-3.27.0": {
       "edition": "2021"
     },
-    "terraform-forge-0.1.2": {
+    "terraform-forge-0.1.3": {
       "edition": "2024"
     },
     "thiserror-2.0.18": {
@@ -3335,25 +3338,22 @@
       "edition": "2021",
       "build_script": "build.rs"
     },
-    "cpufeatures-0.3.0": {
-      "edition": "2024"
-    },
-    "linux-raw-sys-0.12.1": {
-      "edition": "2021"
+    "core-foundation-sys-0.8.7": {
+      "edition": "2018"
     }
   },
   "git_nar_sha256": {
-    "ansible-forge-0.1.1": "sha256-6RMDuvEuBOFIxuGyGW+fIy7U/aXZBXnyPCXBVICW110=",
+    "ansible-forge-0.1.2": "sha256-BKfAjoGMY079c3/7XkZP/MT7sC3PBI7k5FfB/0soL/w=",
     "crossplane-forge-0.1.0": "sha256-15qtdVfdDUxP/68EzxUSFTm9gH8ECIk1OEjalEkTAKQ=",
     "helm-forge-0.1.0": "sha256-U4n8kh1q+1u1jYT2xmqDxuJEpeOMpbxjoGcoC085b94=",
     "iac-forge-0.1.0": "sha256-JJLxk1jpaQtPyfHJLA1McpTd0llFQ9aKk9LbBxePyeI=",
-    "meimei-0.1.1": "sha256-GRqKw63sl3lo36lgwtYiMCk7A/egtmKts9UVGvK6WlI=",
-    "openapi-forge-0.1.2": "sha256-SF2przWy5esBdcf3MiAAkx0hRjFljik108L+Ulr9e5E=",
-    "pulumi-forge-0.1.2": "sha256-uzJ1r3AAYDJdrsYTgRh0K7EWrLomyBCs3wD3Y9yINQo=",
-    "sekkei-0.1.1": "sha256-ALCKRR5BdPCR5qhAeH8chXDBNmZ1Tx+Dr8f1fPHnotw=",
-    "steampipe-forge-0.1.2": "sha256-N4gqNQcztwlAhheX7mrbsSPkKdMbpNDg3wfdRGm7wbY=",
-    "takumi-0.1.0": "sha256-qLzyOiHRxMLF/CziIjJytkkMZ1h3vDf7qvhlPxpCEIk=",
-    "terraform-forge-0.1.2": "sha256-e+JHYAPxax6DPPkUt0nltqy6wGdwVMmdCo1p1uVU+QA="
+    "meimei-0.1.1": "sha256-TWES1QN+KfdHto+qFZvfb6s/66ADVxA1YaD3y8Af28A=",
+    "openapi-forge-0.1.3": "sha256-3M5ifo3NG7Sq07LBh6QOyf2eLLwqR/bnKUE9U3Ukles=",
+    "pulumi-forge-0.1.3": "sha256-Oro7vExwJ9BVtCrBcN8r248T929DGKmrHMmKLtdNZj8=",
+    "sekkei-0.1.1": "sha256-1UP8A/qvvIZKHUjE63Eyp4/qMWBiDqC4a9WdRxdqoH4=",
+    "steampipe-forge-0.1.3": "sha256-DWj/UVy9qQYF/Ag6vwVehP5m0dCMGObsgEA7EJAet/k=",
+    "takumi-0.1.0": "sha256-7HtMjyWFDxStEO2AxXMhTt8C2xMO++LMLOWNC1st2wc=",
+    "terraform-forge-0.1.3": "sha256-jK3tbAljqkhLr+A4b/52DTOVYtJy3HGRDk9hfgRcKdY="
   },
   "flake_metadata": {}
 }
