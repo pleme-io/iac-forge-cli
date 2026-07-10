@@ -230,8 +230,9 @@ dependencies = [
 [[package]]
 name = "crossplane-forge"
 version = "0.1.0"
-source = "git+https://github.com/pleme-io/crossplane-forge#96a6a2c1f13875e4a4be3ce6c312962048b08449"
+source = "git+https://github.com/pleme-io/crossplane-forge#bf374270ce038331e594a3adac56641bf1668781"
 dependencies = [
+ "go-synthesizer",
  "iac-forge",
  "serde",
  "serde_json",
