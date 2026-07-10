@@ -318,6 +318,14 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0cc23270f6e1808e30a928bdc84dea0b9b4136a8bc82338574f23baf47bbd280"
 
 [[package]]
+name = "go-synthesizer"
+version = "0.1.1"
+source = "git+https://github.com/pleme-io/go-synthesizer#763fcac1b04e829ecbe40f111c35d71b6f4232ce"
+dependencies = [
+ "synthesizer-core",
+]
+
+[[package]]
 name = "hashbrown"
 version = "0.15.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -341,7 +349,7 @@ checksum = "2304e00983f87ffb38b55b444b5e3b60a884b5d30c0fca7d82fe33449bbe55ea"
 [[package]]
 name = "helm-forge"
 version = "0.1.0"
-source = "git+https://github.com/pleme-io/helm-forge#8c9f33eb5832d320bf52cf42857c01c7c61e8293"
+source = "git+https://github.com/pleme-io/helm-forge#46888e3a673cfdf776718c4e6a4f400a1561fb70"
 dependencies = [
  "iac-forge",
  "serde",
@@ -352,7 +360,7 @@ dependencies = [
 [[package]]
 name = "iac-forge"
 version = "0.1.0"
-source = "git+https://github.com/pleme-io/iac-forge#c592b447755b62f9c3c7c5181cdd7b4508cae3df"
+source = "git+https://github.com/pleme-io/iac-forge#0974c20cf7d3c17b3f36ed53564b47ca3dd9ff32"
 dependencies = [
  "blake3",
  "meimei",
@@ -479,7 +487,7 @@ checksum = "113b30b4cd05f7c06868fdb2854f66a7b9fece9a48425351cd532e810d74024f"
 [[package]]
 name = "meimei"
 version = "0.1.1"
-source = "git+https://github.com/pleme-io/meimei#e3d272ab79dfd2bd2db7cd4e8c6b576564f2c114"
+source = "git+https://github.com/pleme-io/meimei#21876b878aa432d24514bd44e2b6cbc47015a266"
 
 [[package]]
 name = "memchr"
@@ -510,8 +518,8 @@ checksum = "384b8ab6d37215f3c5301a95a4accb5d64aa607f1fcb26a11b5303878451b4fe"
 
 [[package]]
 name = "openapi-forge"
-version = "0.1.3"
-source = "git+https://github.com/pleme-io/openapi-forge#49cfb32250aa3ff1aed62c87c422b41daf8ea00e"
+version = "0.1.5"
+source = "git+https://github.com/pleme-io/openapi-forge#ab2c26cee2963c2113aed1f24ed86d616145b9c0"
 dependencies = [
  "indexmap",
  "sekkei",
@@ -549,8 +557,8 @@ dependencies = [
 
 [[package]]
 name = "pulumi-forge"
-version = "0.1.3"
-source = "git+https://github.com/pleme-io/pulumi-forge#d6bbeb337d1644effe4c55ab950beb051a101f72"
+version = "0.1.4"
+source = "git+https://github.com/pleme-io/pulumi-forge#14ad771898ed2692b8fc4e9fd2c081210b52ecc1"
 dependencies = [
  "iac-forge",
  "serde",
@@ -600,7 +608,7 @@ checksum = "9774ba4a74de5f7b1c1451ed6cd5285a32eddb5cccb8cc655a4e50009e06477f"
 [[package]]
 name = "sekkei"
 version = "0.1.1"
-source = "git+https://github.com/pleme-io/sekkei#8593191d5bae57d5dddd8d6be618ed63238fda95"
+source = "git+https://github.com/pleme-io/sekkei#e904a701e747dd175da73fd5d5737265a8f049ad"
 dependencies = [
  "serde",
  "serde_json",
@@ -719,9 +727,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "synthesizer-core"
+version = "0.1.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2d61c6a42add42ba68340770985043123fa594ad86b0a02b613bd9c0de62bf2f"
+
+[[package]]
 name = "takumi"
-version = "0.1.0"
-source = "git+https://github.com/pleme-io/takumi#b256cf0c6b93c9d0a1c2afed60f7a53471341247"
+version = "0.1.1"
+source = "git+https://github.com/pleme-io/takumi#787c12a555f5a7d17359f0d8777f96ad5b8f212f"
 dependencies = [
  "indexmap",
  "sekkei",
@@ -744,9 +758,10 @@ dependencies = [
 
 [[package]]
 name = "terraform-forge"
-version = "0.1.3"
-source = "git+https://github.com/pleme-io/terraform-forge#cc22ae0674d0afd03a02a6b08b85f23df8d80180"
+version = "0.1.4"
+source = "git+https://github.com/pleme-io/terraform-forge#94a642c2666e4a68c2e0930621d5082a77b0ef81"
 dependencies = [
+ "go-synthesizer",
  "iac-forge",
  "indexmap",
  "meimei",
