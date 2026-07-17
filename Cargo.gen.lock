@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "cargo_lock_sha256": "a8486dd1d45c5d56c43898ba7b4b2754c5a426cfa1f62d8c4a6980ffec32095e",
+  "cargo_lock_sha256": "599b65b7036a347e704217a56aac01ee0acb41e72febd49ce1d16ad44eaeb8fb",
   "target_resolves": {
     "base": {
-      "ansible-forge-0.1.2-48ae4644e3a18526af8dab3cd25b9c0128ff844a": {
+      "ansible-forge-0.1.3-e9632c545acfd854657cbc19905177143d791b6a": {
         "runtime_dependencies": [
           {
             "name": "iac_forge",
@@ -158,7 +158,7 @@
         "build_dependencies": [],
         "features": []
       },
-      "arrayvec-0.7.6": {
+      "arrayvec-0.7.8": {
         "runtime_dependencies": [],
         "build_dependencies": [],
         "features": []
@@ -168,14 +168,14 @@
         "build_dependencies": [],
         "features": []
       },
-      "bitflags-2.12.1": {
+      "bitflags-2.13.1": {
         "runtime_dependencies": [],
         "build_dependencies": [],
         "features": [
           "std"
         ]
       },
-      "cc-1.2.63": {
+      "cc-1.2.67": {
         "runtime_dependencies": [
           {
             "name": "find_msvc_tools",
@@ -206,7 +206,7 @@
         "build_dependencies": [],
         "features": []
       },
-      "chrono-0.4.44": {
+      "chrono-0.4.45": {
         "runtime_dependencies": [
           {
             "name": "iana_time_zone",
@@ -247,11 +247,11 @@
           "windows-link"
         ]
       },
-      "clap-4.6.1": {
+      "clap-4.6.2": {
         "runtime_dependencies": [
           {
             "name": "clap_builder",
-            "package_key": "clap_builder-4.6.0",
+            "package_key": "clap_builder-4.6.2",
             "kind": "normal",
             "features": [],
             "uses_default_features": false,
@@ -282,7 +282,7 @@
           "usage"
         ]
       },
-      "clap_builder-4.6.0": {
+      "clap_builder-4.6.2": {
         "runtime_dependencies": [
           {
             "name": "anstream",
@@ -359,7 +359,7 @@
           },
           {
             "name": "quote",
-            "package_key": "quote-1.0.45",
+            "package_key": "quote-1.0.46",
             "kind": "normal",
             "features": [],
             "uses_default_features": true,
@@ -369,7 +369,7 @@
           },
           {
             "name": "syn",
-            "package_key": "syn-2.0.117",
+            "package_key": "syn-2.0.119",
             "kind": "normal",
             "features": [
               "full"
@@ -407,7 +407,7 @@
           "std"
         ]
       },
-      "crossplane-forge-0.1.0-bf374270ce038331e594a3adac56641bf1668781": {
+      "crossplane-forge-0.1.0-e8aef9c8b2aba3c270928fa1a7878c85a10d0522": {
         "runtime_dependencies": [
           {
             "name": "go_synthesizer",
@@ -542,7 +542,7 @@
         "build_dependencies": [],
         "features": []
       },
-      "getrandom-0.4.2": {
+      "getrandom-0.4.3": {
         "runtime_dependencies": [
           {
             "name": "cfg_if",
@@ -731,7 +731,7 @@
           },
           {
             "name": "meimei",
-            "package_key": "meimei-0.1.1-21876b878aa432d24514bd44e2b6cbc47015a266",
+            "package_key": "meimei-0.1.1-658313a9184e202b4df74b5595c0884104d67a84",
             "kind": "normal",
             "features": [],
             "uses_default_features": true,
@@ -741,7 +741,7 @@
           },
           {
             "name": "openapi_forge",
-            "package_key": "openapi-forge-0.1.5-ab2c26cee2963c2113aed1f24ed86d616145b9c0",
+            "package_key": "openapi-forge-0.1.5-448187a3c429401e83bbe1acb21f2c3251075b3e",
             "kind": "normal",
             "features": [],
             "uses_default_features": true,
@@ -773,7 +773,7 @@
           },
           {
             "name": "takumi",
-            "package_key": "takumi-0.1.1-787c12a555f5a7d17359f0d8777f96ad5b8f212f",
+            "package_key": "takumi-0.1.1-f8c1a94f882041356a104aaef1b5ecb847cc7882",
             "kind": "normal",
             "features": [],
             "uses_default_features": true,
@@ -807,11 +807,11 @@
           "default"
         ]
       },
-      "iac-forge-cli-0.1.2": {
+      "iac-forge-cli-0.1.3": {
         "runtime_dependencies": [
           {
             "name": "ansible_forge",
-            "package_key": "ansible-forge-0.1.2-48ae4644e3a18526af8dab3cd25b9c0128ff844a",
+            "package_key": "ansible-forge-0.1.3-e9632c545acfd854657cbc19905177143d791b6a",
             "kind": "normal",
             "features": [],
             "uses_default_features": true,
@@ -821,7 +821,7 @@
           },
           {
             "name": "chrono",
-            "package_key": "chrono-0.4.44",
+            "package_key": "chrono-0.4.45",
             "kind": "normal",
             "features": [],
             "uses_default_features": true,
@@ -831,7 +831,7 @@
           },
           {
             "name": "clap",
-            "package_key": "clap-4.6.1",
+            "package_key": "clap-4.6.2",
             "kind": "normal",
             "features": [
               "derive"
@@ -853,7 +853,7 @@
           },
           {
             "name": "crossplane_forge",
-            "package_key": "crossplane-forge-0.1.0-bf374270ce038331e594a3adac56641bf1668781",
+            "package_key": "crossplane-forge-0.1.0-e8aef9c8b2aba3c270928fa1a7878c85a10d0522",
             "kind": "normal",
             "features": [],
             "uses_default_features": true,
@@ -893,7 +893,7 @@
           },
           {
             "name": "openapi_forge",
-            "package_key": "openapi-forge-0.1.5-ab2c26cee2963c2113aed1f24ed86d616145b9c0",
+            "package_key": "openapi-forge-0.1.5-448187a3c429401e83bbe1acb21f2c3251075b3e",
             "kind": "normal",
             "features": [],
             "uses_default_features": true,
@@ -903,7 +903,7 @@
           },
           {
             "name": "pulumi_forge",
-            "package_key": "pulumi-forge-0.1.4-14ad771898ed2692b8fc4e9fd2c081210b52ecc1",
+            "package_key": "pulumi-forge-0.1.5-7918de21c4d07fb70f21cba4d3edde611deba118",
             "kind": "normal",
             "features": [],
             "uses_default_features": true,
@@ -935,7 +935,7 @@
           },
           {
             "name": "steampipe_forge",
-            "package_key": "steampipe-forge-0.1.3-cf524278de5e65fb70dbce46c5f4933f6cadf25d",
+            "package_key": "steampipe-forge-0.1.5-50e4caf0c75cac31eeae92e0392f4600c2339f21",
             "kind": "normal",
             "features": [],
             "uses_default_features": true,
@@ -1035,12 +1035,12 @@
           "std"
         ]
       },
-      "meimei-0.1.1-21876b878aa432d24514bd44e2b6cbc47015a266": {
+      "meimei-0.1.1-658313a9184e202b4df74b5595c0884104d67a84": {
         "runtime_dependencies": [],
         "build_dependencies": [],
         "features": []
       },
-      "memchr-2.8.1": {
+      "memchr-2.8.3": {
         "runtime_dependencies": [],
         "build_dependencies": [],
         "features": [
@@ -1073,7 +1073,7 @@
           "std"
         ]
       },
-      "openapi-forge-0.1.5-ab2c26cee2963c2113aed1f24ed86d616145b9c0": {
+      "openapi-forge-0.1.5-448187a3c429401e83bbe1acb21f2c3251075b3e": {
         "runtime_dependencies": [
           {
             "name": "indexmap",
@@ -1089,7 +1089,7 @@
           },
           {
             "name": "sekkei",
-            "package_key": "sekkei-0.1.1-e904a701e747dd175da73fd5d5737265a8f049ad",
+            "package_key": "sekkei-0.1.1-6a96f7e49c7ec5a6388e9a5f2a8f8a49be5fffb8",
             "kind": "normal",
             "features": [],
             "uses_default_features": true,
@@ -1131,7 +1131,7 @@
           },
           {
             "name": "takumi",
-            "package_key": "takumi-0.1.1-787c12a555f5a7d17359f0d8777f96ad5b8f212f",
+            "package_key": "takumi-0.1.1-f8c1a94f882041356a104aaef1b5ecb847cc7882",
             "kind": "normal",
             "features": [],
             "uses_default_features": true,
@@ -1172,7 +1172,7 @@
           "proc-macro"
         ]
       },
-      "pulumi-forge-0.1.4-14ad771898ed2692b8fc4e9fd2c081210b52ecc1": {
+      "pulumi-forge-0.1.5-7918de21c4d07fb70f21cba4d3edde611deba118": {
         "runtime_dependencies": [
           {
             "name": "iac_forge",
@@ -1210,7 +1210,7 @@
         "build_dependencies": [],
         "features": []
       },
-      "quote-1.0.45": {
+      "quote-1.0.46": {
         "runtime_dependencies": [
           {
             "name": "proc_macro2",
@@ -1234,7 +1234,7 @@
         "build_dependencies": [],
         "features": []
       },
-      "sekkei-0.1.1-e904a701e747dd175da73fd5d5737265a8f049ad": {
+      "sekkei-0.1.1-6a96f7e49c7ec5a6388e9a5f2a8f8a49be5fffb8": {
         "runtime_dependencies": [
           {
             "name": "serde",
@@ -1309,7 +1309,6 @@
         ],
         "build_dependencies": [],
         "features": [
-          "alloc",
           "default",
           "derive",
           "serde_derive",
@@ -1320,7 +1319,6 @@
         "runtime_dependencies": [],
         "build_dependencies": [],
         "features": [
-          "alloc",
           "result",
           "std"
         ]
@@ -1341,7 +1339,7 @@
           },
           {
             "name": "quote",
-            "package_key": "quote-1.0.45",
+            "package_key": "quote-1.0.46",
             "kind": "normal",
             "features": [
               "proc-macro"
@@ -1353,7 +1351,7 @@
           },
           {
             "name": "syn",
-            "package_key": "syn-2.0.117",
+            "package_key": "syn-2.0.119",
             "kind": "normal",
             "features": [
               "clone-impls",
@@ -1387,7 +1385,7 @@
           },
           {
             "name": "memchr",
-            "package_key": "memchr-2.8.1",
+            "package_key": "memchr-2.8.3",
             "kind": "normal",
             "features": [],
             "uses_default_features": false,
@@ -1407,7 +1405,7 @@
           },
           {
             "name": "zmij",
-            "package_key": "zmij-1.0.21",
+            "package_key": "zmij-1.0.23",
             "kind": "normal",
             "features": [],
             "uses_default_features": true,
@@ -1504,7 +1502,7 @@
           "std"
         ]
       },
-      "steampipe-forge-0.1.3-cf524278de5e65fb70dbce46c5f4933f6cadf25d": {
+      "steampipe-forge-0.1.5-50e4caf0c75cac31eeae92e0392f4600c2339f21": {
         "runtime_dependencies": [
           {
             "name": "iac_forge",
@@ -1547,7 +1545,7 @@
         "build_dependencies": [],
         "features": []
       },
-      "syn-2.0.117": {
+      "syn-2.0.119": {
         "runtime_dependencies": [
           {
             "name": "proc_macro2",
@@ -1561,7 +1559,7 @@
           },
           {
             "name": "quote",
-            "package_key": "quote-1.0.45",
+            "package_key": "quote-1.0.46",
             "kind": "normal",
             "features": [],
             "uses_default_features": false,
@@ -1599,7 +1597,7 @@
         "build_dependencies": [],
         "features": []
       },
-      "takumi-0.1.1-787c12a555f5a7d17359f0d8777f96ad5b8f212f": {
+      "takumi-0.1.1-f8c1a94f882041356a104aaef1b5ecb847cc7882": {
         "runtime_dependencies": [
           {
             "name": "indexmap",
@@ -1615,7 +1613,7 @@
           },
           {
             "name": "sekkei",
-            "package_key": "sekkei-0.1.1-e904a701e747dd175da73fd5d5737265a8f049ad",
+            "package_key": "sekkei-0.1.1-6a96f7e49c7ec5a6388e9a5f2a8f8a49be5fffb8",
             "kind": "normal",
             "features": [],
             "uses_default_features": true,
@@ -1663,7 +1661,7 @@
           },
           {
             "name": "getrandom",
-            "package_key": "getrandom-0.4.2",
+            "package_key": "getrandom-0.4.3",
             "kind": "normal",
             "features": [],
             "uses_default_features": false,
@@ -1738,7 +1736,7 @@
           },
           {
             "name": "meimei",
-            "package_key": "meimei-0.1.1-21876b878aa432d24514bd44e2b6cbc47015a266",
+            "package_key": "meimei-0.1.1-658313a9184e202b4df74b5595c0884104d67a84",
             "kind": "normal",
             "features": [],
             "uses_default_features": true,
@@ -1748,7 +1746,7 @@
           },
           {
             "name": "openapi_forge",
-            "package_key": "openapi-forge-0.1.5-ab2c26cee2963c2113aed1f24ed86d616145b9c0",
+            "package_key": "openapi-forge-0.1.5-448187a3c429401e83bbe1acb21f2c3251075b3e",
             "kind": "normal",
             "features": [],
             "uses_default_features": true,
@@ -1835,7 +1833,7 @@
           },
           {
             "name": "quote",
-            "package_key": "quote-1.0.45",
+            "package_key": "quote-1.0.46",
             "kind": "normal",
             "features": [],
             "uses_default_features": true,
@@ -1845,7 +1843,7 @@
           },
           {
             "name": "syn",
-            "package_key": "syn-2.0.117",
+            "package_key": "syn-2.0.119",
             "kind": "normal",
             "features": [],
             "uses_default_features": true,
@@ -2040,7 +2038,7 @@
           "std"
         ]
       },
-      "zmij-1.0.21": {
+      "zmij-1.0.23": {
         "runtime_dependencies": [],
         "build_dependencies": [],
         "features": []
@@ -2063,7 +2061,7 @@
               },
               {
                 "name": "arrayvec",
-                "package_key": "arrayvec-0.7.6",
+                "package_key": "arrayvec-0.7.8",
                 "kind": "normal",
                 "features": [],
                 "uses_default_features": false,
@@ -2095,7 +2093,7 @@
             "build_dependencies": [
               {
                 "name": "cc",
-                "package_key": "cc-1.2.63",
+                "package_key": "cc-1.2.67",
                 "kind": "build",
                 "features": [],
                 "uses_default_features": true,
@@ -2139,7 +2137,7 @@
             "runtime_dependencies": [
               {
                 "name": "bitflags",
-                "package_key": "bitflags-2.12.1",
+                "package_key": "bitflags-2.13.1",
                 "kind": "normal",
                 "features": [],
                 "uses_default_features": false,
@@ -2224,7 +2222,7 @@
               },
               {
                 "name": "arrayvec",
-                "package_key": "arrayvec-0.7.6",
+                "package_key": "arrayvec-0.7.8",
                 "kind": "normal",
                 "features": [],
                 "uses_default_features": false,
@@ -2256,7 +2254,7 @@
             "build_dependencies": [
               {
                 "name": "cc",
-                "package_key": "cc-1.2.63",
+                "package_key": "cc-1.2.67",
                 "kind": "build",
                 "features": [],
                 "uses_default_features": true,
@@ -2293,7 +2291,7 @@
             "runtime_dependencies": [
               {
                 "name": "bitflags",
-                "package_key": "bitflags-2.12.1",
+                "package_key": "bitflags-2.13.1",
                 "kind": "normal",
                 "features": [],
                 "uses_default_features": false,
@@ -2409,7 +2407,7 @@
               },
               {
                 "name": "arrayvec",
-                "package_key": "arrayvec-0.7.6",
+                "package_key": "arrayvec-0.7.8",
                 "kind": "normal",
                 "features": [],
                 "uses_default_features": false,
@@ -2441,7 +2439,7 @@
             "build_dependencies": [
               {
                 "name": "cc",
-                "package_key": "cc-1.2.63",
+                "package_key": "cc-1.2.67",
                 "kind": "build",
                 "features": [],
                 "uses_default_features": true,
@@ -2478,7 +2476,7 @@
             "runtime_dependencies": [
               {
                 "name": "bitflags",
-                "package_key": "bitflags-2.12.1",
+                "package_key": "bitflags-2.13.1",
                 "kind": "normal",
                 "features": [],
                 "uses_default_features": false,
@@ -2594,7 +2592,7 @@
               },
               {
                 "name": "arrayvec",
-                "package_key": "arrayvec-0.7.6",
+                "package_key": "arrayvec-0.7.8",
                 "kind": "normal",
                 "features": [],
                 "uses_default_features": false,
@@ -2636,7 +2634,7 @@
             "build_dependencies": [
               {
                 "name": "cc",
-                "package_key": "cc-1.2.63",
+                "package_key": "cc-1.2.67",
                 "kind": "build",
                 "features": [],
                 "uses_default_features": true,
@@ -2685,7 +2683,7 @@
             "runtime_dependencies": [
               {
                 "name": "bitflags",
-                "package_key": "bitflags-2.12.1",
+                "package_key": "bitflags-2.13.1",
                 "kind": "normal",
                 "features": [],
                 "uses_default_features": false,
@@ -2770,7 +2768,7 @@
               },
               {
                 "name": "arrayvec",
-                "package_key": "arrayvec-0.7.6",
+                "package_key": "arrayvec-0.7.8",
                 "kind": "normal",
                 "features": [],
                 "uses_default_features": false,
@@ -2812,7 +2810,7 @@
             "build_dependencies": [
               {
                 "name": "cc",
-                "package_key": "cc-1.2.63",
+                "package_key": "cc-1.2.67",
                 "kind": "build",
                 "features": [],
                 "uses_default_features": true,
@@ -2854,7 +2852,7 @@
             "runtime_dependencies": [
               {
                 "name": "bitflags",
-                "package_key": "bitflags-2.12.1",
+                "package_key": "bitflags-2.13.1",
                 "kind": "normal",
                 "features": [],
                 "uses_default_features": false,
@@ -2970,7 +2968,7 @@
               },
               {
                 "name": "arrayvec",
-                "package_key": "arrayvec-0.7.6",
+                "package_key": "arrayvec-0.7.8",
                 "kind": "normal",
                 "features": [],
                 "uses_default_features": false,
@@ -3012,7 +3010,7 @@
             "build_dependencies": [
               {
                 "name": "cc",
-                "package_key": "cc-1.2.63",
+                "package_key": "cc-1.2.67",
                 "kind": "build",
                 "features": [],
                 "uses_default_features": true,
@@ -3054,7 +3052,7 @@
             "runtime_dependencies": [
               {
                 "name": "bitflags",
-                "package_key": "bitflags-2.12.1",
+                "package_key": "bitflags-2.13.1",
                 "kind": "normal",
                 "features": [],
                 "uses_default_features": false,
@@ -3157,7 +3155,7 @@
     }
   },
   "per_crate": {
-    "ansible-forge-0.1.2-48ae4644e3a18526af8dab3cd25b9c0128ff844a": {
+    "ansible-forge-0.1.3-e9632c545acfd854657cbc19905177143d791b6a": {
       "edition": "2024"
     },
     "anstream-1.0.0": {
@@ -3175,29 +3173,29 @@
     "arrayref-0.3.9": {
       "edition": "2015"
     },
-    "arrayvec-0.7.6": {
+    "arrayvec-0.7.8": {
       "edition": "2018"
     },
     "autocfg-1.5.1": {
       "edition": "2015"
     },
-    "bitflags-2.12.1": {
+    "bitflags-2.13.1": {
       "edition": "2021"
     },
     "blake3-1.8.5": {
       "edition": "2024",
       "build_script": "build.rs"
     },
-    "cc-1.2.63": {
+    "cc-1.2.67": {
       "edition": "2018"
     },
     "cfg-if-1.0.4": {
       "edition": "2018"
     },
-    "chrono-0.4.44": {
+    "chrono-0.4.45": {
       "edition": "2021"
     },
-    "clap-4.6.1": {
+    "clap-4.6.2": {
       "edition": "2024",
       "binaries": [
         {
@@ -3206,7 +3204,7 @@
         }
       ]
     },
-    "clap_builder-4.6.0": {
+    "clap_builder-4.6.2": {
       "edition": "2024"
     },
     "clap_derive-4.6.1": {
@@ -3231,7 +3229,7 @@
     "cpufeatures-0.3.0": {
       "edition": "2024"
     },
-    "crossplane-forge-0.1.0-bf374270ce038331e594a3adac56641bf1668781": {
+    "crossplane-forge-0.1.0-e8aef9c8b2aba3c270928fa1a7878c85a10d0522": {
       "edition": "2024"
     },
     "equivalent-1.0.2": {
@@ -3246,7 +3244,7 @@
     "find-msvc-tools-0.1.9": {
       "edition": "2018"
     },
-    "getrandom-0.4.2": {
+    "getrandom-0.4.3": {
       "edition": "2024",
       "build_script": "build.rs"
     },
@@ -3268,7 +3266,7 @@
     "iac-forge-0.1.0-0974c20cf7d3c17b3f36ed53564b47ca3dd9ff32": {
       "edition": "2024"
     },
-    "iac-forge-cli-0.1.2": {
+    "iac-forge-cli-0.1.3": {
       "edition": "2024",
       "binaries": [
         {
@@ -3296,10 +3294,10 @@
     "linux-raw-sys-0.12.1": {
       "edition": "2021"
     },
-    "meimei-0.1.1-21876b878aa432d24514bd44e2b6cbc47015a266": {
+    "meimei-0.1.1-658313a9184e202b4df74b5595c0884104d67a84": {
       "edition": "2024"
     },
-    "memchr-2.8.1": {
+    "memchr-2.8.3": {
       "edition": "2021"
     },
     "num-traits-0.2.19": {
@@ -3309,17 +3307,17 @@
     "once_cell-1.21.4": {
       "edition": "2021"
     },
-    "openapi-forge-0.1.5-ab2c26cee2963c2113aed1f24ed86d616145b9c0": {
+    "openapi-forge-0.1.5-448187a3c429401e83bbe1acb21f2c3251075b3e": {
       "edition": "2024"
     },
     "proc-macro2-1.0.106": {
       "edition": "2021",
       "build_script": "build.rs"
     },
-    "pulumi-forge-0.1.4-14ad771898ed2692b8fc4e9fd2c081210b52ecc1": {
+    "pulumi-forge-0.1.5-7918de21c4d07fb70f21cba4d3edde611deba118": {
       "edition": "2024"
     },
-    "quote-1.0.45": {
+    "quote-1.0.46": {
       "edition": "2021",
       "build_script": "build.rs"
     },
@@ -3330,7 +3328,7 @@
     "ryu-1.0.23": {
       "edition": "2021"
     },
-    "sekkei-0.1.1-e904a701e747dd175da73fd5d5737265a8f049ad": {
+    "sekkei-0.1.1-6a96f7e49c7ec5a6388e9a5f2a8f8a49be5fffb8": {
       "edition": "2024"
     },
     "serde-1.0.228": {
@@ -3358,19 +3356,19 @@
     "shlex-2.0.1": {
       "edition": "2018"
     },
-    "steampipe-forge-0.1.3-cf524278de5e65fb70dbce46c5f4933f6cadf25d": {
+    "steampipe-forge-0.1.5-50e4caf0c75cac31eeae92e0392f4600c2339f21": {
       "edition": "2024"
     },
     "strsim-0.11.1": {
       "edition": "2015"
     },
-    "syn-2.0.117": {
+    "syn-2.0.119": {
       "edition": "2021"
     },
     "synthesizer-core-0.1.1": {
       "edition": "2024"
     },
-    "takumi-0.1.1-787c12a555f5a7d17359f0d8777f96ad5b8f212f": {
+    "takumi-0.1.1-f8c1a94f882041356a104aaef1b5ecb847cc7882": {
       "edition": "2024"
     },
     "tempfile-3.27.0": {
@@ -3421,23 +3419,23 @@
     "winnow-0.7.15": {
       "edition": "2021"
     },
-    "zmij-1.0.21": {
+    "zmij-1.0.23": {
       "edition": "2021",
       "build_script": "build.rs"
     }
   },
   "git_nar_sha256": {
-    "ansible-forge-0.1.2-48ae4644e3a18526af8dab3cd25b9c0128ff844a": "sha256-BKfAjoGMY079c3/7XkZP/MT7sC3PBI7k5FfB/0soL/w=",
-    "crossplane-forge-0.1.0-bf374270ce038331e594a3adac56641bf1668781": "sha256-TWrlt3kaKXXL/FyaOuHXHSgfSdy2yog+5/AY/KYjwwI=",
+    "ansible-forge-0.1.3-e9632c545acfd854657cbc19905177143d791b6a": "sha256-TW6TcgVEUBzr8AOb/STxtsRZFQiWVndiQFY44B0Iccc=",
+    "crossplane-forge-0.1.0-e8aef9c8b2aba3c270928fa1a7878c85a10d0522": "sha256-B7GaemYH1U/CGO5NWcciO5FD83/c1AiRZ/Vr86MLkL4=",
     "go-synthesizer-0.1.1-763fcac1b04e829ecbe40f111c35d71b6f4232ce": "sha256-4p8ZdcGdZco9QHF/0YIyWis/vEJnvQmKrNph4KMgXZc=",
     "helm-forge-0.1.0-46888e3a673cfdf776718c4e6a4f400a1561fb70": "sha256-+AuFJA7x8sJvqx8uiD+AUZQoERcUAkowjrL0uAzT0/0=",
     "iac-forge-0.1.0-0974c20cf7d3c17b3f36ed53564b47ca3dd9ff32": "sha256-47h2Z59b76y7LheE9ENqgc4vys5Xs3glLlsxCa51jAA=",
-    "meimei-0.1.1-21876b878aa432d24514bd44e2b6cbc47015a266": "sha256-HYHtDwFfqWnx/xQSi1no0hDJCUNhGTP1Xuq4d+BBBMg=",
-    "openapi-forge-0.1.5-ab2c26cee2963c2113aed1f24ed86d616145b9c0": "sha256-9ymnQ/KwZrB3hlbYaAFzbUg5UgurvUrW25jPYVCBInE=",
-    "pulumi-forge-0.1.4-14ad771898ed2692b8fc4e9fd2c081210b52ecc1": "sha256-KFdjxxa8hWthvJsJIAE8Hm59SDCPPL7h4dUbNqn4u0I=",
-    "sekkei-0.1.1-e904a701e747dd175da73fd5d5737265a8f049ad": "sha256-d6/RtiU8X2jLG+b7AhzLXuaLUGM2JxXIs3edumQyPoI=",
-    "steampipe-forge-0.1.3-cf524278de5e65fb70dbce46c5f4933f6cadf25d": "sha256-DWj/UVy9qQYF/Ag6vwVehP5m0dCMGObsgEA7EJAet/k=",
-    "takumi-0.1.1-787c12a555f5a7d17359f0d8777f96ad5b8f212f": "sha256-iWeT1vqCzreVeELlxD1ekLgJrxvi5du2EefTYERicw4=",
+    "meimei-0.1.1-658313a9184e202b4df74b5595c0884104d67a84": "sha256-RigKWzrNttgzEd7BUJvM0aXEgpyFcxYeFG4vJ4TbTlE=",
+    "openapi-forge-0.1.5-448187a3c429401e83bbe1acb21f2c3251075b3e": "sha256-P2j7WD+PX7ozXOn8xWucAbOXkpJuKzrbH0a31y2TUNA=",
+    "pulumi-forge-0.1.5-7918de21c4d07fb70f21cba4d3edde611deba118": "sha256-MRnACapyGvpfEABm58CgB1aXGtwPEzpZ4HPtszeMB8Q=",
+    "sekkei-0.1.1-6a96f7e49c7ec5a6388e9a5f2a8f8a49be5fffb8": "sha256-Sy4rMsYVTJb36CQ7gWsyx3Jj8+kyWDAvoVwhbNuBB7A=",
+    "steampipe-forge-0.1.5-50e4caf0c75cac31eeae92e0392f4600c2339f21": "sha256-GwwkwmvEvfdrpAUvM8VaSBCjGBlM3IHV/iRZYAj1BY4=",
+    "takumi-0.1.1-f8c1a94f882041356a104aaef1b5ecb847cc7882": "sha256-2lALxl7MuqHddmybQDi4zYsZVK4zmEW4Y0j+hc0+tVQ=",
     "terraform-forge-0.1.4-94a642c2666e4a68c2e0930621d5082a77b0ef81": "sha256-TqmOa5pcNpX3pvQknPNUB1aKJOdDtZrYnTAeFwYJVg0="
   },
   "flake_metadata": {}
