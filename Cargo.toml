@@ -32,14 +32,14 @@ helm = ["dep:helm-forge"]
 # train. Restore once pangea-forge is reachable + buildable.
 
 [dependencies]
-openapi-forge = { git = "https://github.com/pleme-io/openapi-forge" }
-iac-forge = { git = "https://github.com/pleme-io/iac-forge" }
-terraform-forge = { git = "https://github.com/pleme-io/terraform-forge", optional = true }
-pulumi-forge = { git = "https://github.com/pleme-io/pulumi-forge", optional = true }
-crossplane-forge = { git = "https://github.com/pleme-io/crossplane-forge", optional = true }
-ansible-forge = { git = "https://github.com/pleme-io/ansible-forge", optional = true }
-steampipe-forge = { git = "https://github.com/pleme-io/steampipe-forge", optional = true }
-helm-forge = { git = "https://github.com/pleme-io/helm-forge", optional = true }
+openapi-forge = "0.1"
+iac-forge = "0.1"
+terraform-forge = { version = "0.1", optional = true }
+pulumi-forge = { version = "0.1", optional = true }
+crossplane-forge = { version = "0.1", optional = true }
+ansible-forge = { version = "0.1", optional = true }
+steampipe-forge = { version = "0.1", optional = true }
+helm-forge = { version = "0.1", optional = true }
 chrono = "0.4"
 clap = { version = "4", features = ["derive"] }
 colored = "3"

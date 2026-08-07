@@ -1,13 +1,16 @@
 {
-  "schema_version": 1,
-  "cargo_lock_sha256": "599b65b7036a347e704217a56aac01ee0acb41e72febd49ce1d16ad44eaeb8fb",
+  "schema_version": 2,
+  "cargo_lock_sha256": "caae07a3650f9adb884f29171800b10068287b054d9fe033429eec6aa895c756",
+  "manifest_sha256": {
+    "Cargo.toml": "d266e74babb943708152ea5c30878268f6886e7b88bdead71381e56ef97afe53"
+  },
   "target_resolves": {
     "base": {
-      "ansible-forge-0.1.3-e9632c545acfd854657cbc19905177143d791b6a": {
+      "ansible-forge-0.1.6": {
         "runtime_dependencies": [
           {
             "name": "iac_forge",
-            "package_key": "iac-forge-0.1.0-0974c20cf7d3c17b3f36ed53564b47ca3dd9ff32",
+            "package_key": "iac-forge-0.1.5",
             "kind": "normal",
             "features": [],
             "uses_default_features": true,
@@ -407,11 +410,11 @@
           "std"
         ]
       },
-      "crossplane-forge-0.1.0-e8aef9c8b2aba3c270928fa1a7878c85a10d0522": {
+      "crossplane-forge-0.1.1": {
         "runtime_dependencies": [
           {
             "name": "go_synthesizer",
-            "package_key": "go-synthesizer-0.1.1-763fcac1b04e829ecbe40f111c35d71b6f4232ce",
+            "package_key": "go-synthesizer-0.1.2",
             "kind": "normal",
             "features": [],
             "uses_default_features": true,
@@ -421,7 +424,7 @@
           },
           {
             "name": "iac_forge",
-            "package_key": "iac-forge-0.1.0-0974c20cf7d3c17b3f36ed53564b47ca3dd9ff32",
+            "package_key": "iac-forge-0.1.5",
             "kind": "normal",
             "features": [],
             "uses_default_features": true,
@@ -643,7 +646,7 @@
         "build_dependencies": [],
         "features": []
       },
-      "go-synthesizer-0.1.1-763fcac1b04e829ecbe40f111c35d71b6f4232ce": {
+      "go-synthesizer-0.1.2": {
         "runtime_dependencies": [
           {
             "name": "synthesizer_core",
@@ -669,11 +672,11 @@
         "build_dependencies": [],
         "features": []
       },
-      "helm-forge-0.1.0-46888e3a673cfdf776718c4e6a4f400a1561fb70": {
+      "helm-forge-0.1.1": {
         "runtime_dependencies": [
           {
             "name": "iac_forge",
-            "package_key": "iac-forge-0.1.0-0974c20cf7d3c17b3f36ed53564b47ca3dd9ff32",
+            "package_key": "iac-forge-0.1.5",
             "kind": "normal",
             "features": [],
             "uses_default_features": true,
@@ -717,7 +720,7 @@
         "build_dependencies": [],
         "features": []
       },
-      "iac-forge-0.1.0-0974c20cf7d3c17b3f36ed53564b47ca3dd9ff32": {
+      "iac-forge-0.1.5": {
         "runtime_dependencies": [
           {
             "name": "blake3",
@@ -731,7 +734,7 @@
           },
           {
             "name": "meimei",
-            "package_key": "meimei-0.1.1-658313a9184e202b4df74b5595c0884104d67a84",
+            "package_key": "meimei-0.1.1",
             "kind": "normal",
             "features": [],
             "uses_default_features": true,
@@ -741,7 +744,17 @@
           },
           {
             "name": "openapi_forge",
-            "package_key": "openapi-forge-0.1.5-448187a3c429401e83bbe1acb21f2c3251075b3e",
+            "package_key": "openapi-forge-0.1.7",
+            "kind": "normal",
+            "features": [],
+            "uses_default_features": true,
+            "optional": false,
+            "target": null,
+            "tree": "target"
+          },
+          {
+            "name": "takumi",
+            "package_key": "pleme-io-takumi-0.1.2",
             "kind": "normal",
             "features": [],
             "uses_default_features": true,
@@ -764,16 +777,6 @@
           {
             "name": "serde_json",
             "package_key": "serde_json-1.0.150",
-            "kind": "normal",
-            "features": [],
-            "uses_default_features": true,
-            "optional": false,
-            "target": null,
-            "tree": "target"
-          },
-          {
-            "name": "takumi",
-            "package_key": "takumi-0.1.1-f8c1a94f882041356a104aaef1b5ecb847cc7882",
             "kind": "normal",
             "features": [],
             "uses_default_features": true,
@@ -811,7 +814,7 @@
         "runtime_dependencies": [
           {
             "name": "ansible_forge",
-            "package_key": "ansible-forge-0.1.3-e9632c545acfd854657cbc19905177143d791b6a",
+            "package_key": "ansible-forge-0.1.6",
             "kind": "normal",
             "features": [],
             "uses_default_features": true,
@@ -853,7 +856,7 @@
           },
           {
             "name": "crossplane_forge",
-            "package_key": "crossplane-forge-0.1.0-e8aef9c8b2aba3c270928fa1a7878c85a10d0522",
+            "package_key": "crossplane-forge-0.1.1",
             "kind": "normal",
             "features": [],
             "uses_default_features": true,
@@ -873,7 +876,7 @@
           },
           {
             "name": "helm_forge",
-            "package_key": "helm-forge-0.1.0-46888e3a673cfdf776718c4e6a4f400a1561fb70",
+            "package_key": "helm-forge-0.1.1",
             "kind": "normal",
             "features": [],
             "uses_default_features": true,
@@ -883,7 +886,7 @@
           },
           {
             "name": "iac_forge",
-            "package_key": "iac-forge-0.1.0-0974c20cf7d3c17b3f36ed53564b47ca3dd9ff32",
+            "package_key": "iac-forge-0.1.5",
             "kind": "normal",
             "features": [],
             "uses_default_features": true,
@@ -893,7 +896,7 @@
           },
           {
             "name": "openapi_forge",
-            "package_key": "openapi-forge-0.1.5-448187a3c429401e83bbe1acb21f2c3251075b3e",
+            "package_key": "openapi-forge-0.1.7",
             "kind": "normal",
             "features": [],
             "uses_default_features": true,
@@ -903,7 +906,7 @@
           },
           {
             "name": "pulumi_forge",
-            "package_key": "pulumi-forge-0.1.5-7918de21c4d07fb70f21cba4d3edde611deba118",
+            "package_key": "pulumi-forge-0.1.7",
             "kind": "normal",
             "features": [],
             "uses_default_features": true,
@@ -935,7 +938,7 @@
           },
           {
             "name": "steampipe_forge",
-            "package_key": "steampipe-forge-0.1.5-50e4caf0c75cac31eeae92e0392f4600c2339f21",
+            "package_key": "steampipe-forge-0.1.7",
             "kind": "normal",
             "features": [],
             "uses_default_features": true,
@@ -945,7 +948,7 @@
           },
           {
             "name": "terraform_forge",
-            "package_key": "terraform-forge-0.1.4-94a642c2666e4a68c2e0930621d5082a77b0ef81",
+            "package_key": "terraform-forge-0.1.6",
             "kind": "normal",
             "features": [],
             "uses_default_features": true,
@@ -1035,7 +1038,7 @@
           "std"
         ]
       },
-      "meimei-0.1.1-658313a9184e202b4df74b5595c0884104d67a84": {
+      "meimei-0.1.1": {
         "runtime_dependencies": [],
         "build_dependencies": [],
         "features": []
@@ -1073,7 +1076,7 @@
           "std"
         ]
       },
-      "openapi-forge-0.1.5-448187a3c429401e83bbe1acb21f2c3251075b3e": {
+      "openapi-forge-0.1.7": {
         "runtime_dependencies": [
           {
             "name": "indexmap",
@@ -1088,8 +1091,18 @@
             "tree": "target"
           },
           {
+            "name": "takumi",
+            "package_key": "pleme-io-takumi-0.1.2",
+            "kind": "normal",
+            "features": [],
+            "uses_default_features": true,
+            "optional": false,
+            "target": null,
+            "tree": "target"
+          },
+          {
             "name": "sekkei",
-            "package_key": "sekkei-0.1.1-6a96f7e49c7ec5a6388e9a5f2a8f8a49be5fffb8",
+            "package_key": "sekkei-0.1.1",
             "kind": "normal",
             "features": [],
             "uses_default_features": true,
@@ -1130,8 +1143,36 @@
             "tree": "target"
           },
           {
-            "name": "takumi",
-            "package_key": "takumi-0.1.1-f8c1a94f882041356a104aaef1b5ecb847cc7882",
+            "name": "thiserror",
+            "package_key": "thiserror-2.0.18",
+            "kind": "normal",
+            "features": [],
+            "uses_default_features": true,
+            "optional": false,
+            "target": null,
+            "tree": "target"
+          }
+        ],
+        "build_dependencies": [],
+        "features": []
+      },
+      "pleme-io-takumi-0.1.2": {
+        "runtime_dependencies": [
+          {
+            "name": "indexmap",
+            "package_key": "indexmap-2.14.0",
+            "kind": "normal",
+            "features": [
+              "serde"
+            ],
+            "uses_default_features": true,
+            "optional": false,
+            "target": null,
+            "tree": "target"
+          },
+          {
+            "name": "sekkei",
+            "package_key": "sekkei-0.1.1",
             "kind": "normal",
             "features": [],
             "uses_default_features": true,
@@ -1140,8 +1181,20 @@
             "tree": "target"
           },
           {
-            "name": "thiserror",
-            "package_key": "thiserror-2.0.18",
+            "name": "serde",
+            "package_key": "serde-1.0.228",
+            "kind": "normal",
+            "features": [
+              "derive"
+            ],
+            "uses_default_features": true,
+            "optional": false,
+            "target": null,
+            "tree": "target"
+          },
+          {
+            "name": "serde_json",
+            "package_key": "serde_json-1.0.150",
             "kind": "normal",
             "features": [],
             "uses_default_features": true,
@@ -1172,11 +1225,11 @@
           "proc-macro"
         ]
       },
-      "pulumi-forge-0.1.5-7918de21c4d07fb70f21cba4d3edde611deba118": {
+      "pulumi-forge-0.1.7": {
         "runtime_dependencies": [
           {
             "name": "iac_forge",
-            "package_key": "iac-forge-0.1.0-0974c20cf7d3c17b3f36ed53564b47ca3dd9ff32",
+            "package_key": "iac-forge-0.1.5",
             "kind": "normal",
             "features": [],
             "uses_default_features": true,
@@ -1234,7 +1287,7 @@
         "build_dependencies": [],
         "features": []
       },
-      "sekkei-0.1.1-6a96f7e49c7ec5a6388e9a5f2a8f8a49be5fffb8": {
+      "sekkei-0.1.1": {
         "runtime_dependencies": [
           {
             "name": "serde",
@@ -1502,11 +1555,11 @@
           "std"
         ]
       },
-      "steampipe-forge-0.1.5-50e4caf0c75cac31eeae92e0392f4600c2339f21": {
+      "steampipe-forge-0.1.7": {
         "runtime_dependencies": [
           {
             "name": "iac_forge",
-            "package_key": "iac-forge-0.1.0-0974c20cf7d3c17b3f36ed53564b47ca3dd9ff32",
+            "package_key": "iac-forge-0.1.5",
             "kind": "normal",
             "features": [],
             "uses_default_features": true,
@@ -1597,56 +1650,6 @@
         "build_dependencies": [],
         "features": []
       },
-      "takumi-0.1.1-f8c1a94f882041356a104aaef1b5ecb847cc7882": {
-        "runtime_dependencies": [
-          {
-            "name": "indexmap",
-            "package_key": "indexmap-2.14.0",
-            "kind": "normal",
-            "features": [
-              "serde"
-            ],
-            "uses_default_features": true,
-            "optional": false,
-            "target": null,
-            "tree": "target"
-          },
-          {
-            "name": "sekkei",
-            "package_key": "sekkei-0.1.1-6a96f7e49c7ec5a6388e9a5f2a8f8a49be5fffb8",
-            "kind": "normal",
-            "features": [],
-            "uses_default_features": true,
-            "optional": false,
-            "target": null,
-            "tree": "target"
-          },
-          {
-            "name": "serde",
-            "package_key": "serde-1.0.228",
-            "kind": "normal",
-            "features": [
-              "derive"
-            ],
-            "uses_default_features": true,
-            "optional": false,
-            "target": null,
-            "tree": "target"
-          },
-          {
-            "name": "serde_json",
-            "package_key": "serde_json-1.0.150",
-            "kind": "normal",
-            "features": [],
-            "uses_default_features": true,
-            "optional": false,
-            "target": null,
-            "tree": "target"
-          }
-        ],
-        "build_dependencies": [],
-        "features": []
-      },
       "tempfile-3.27.0": {
         "runtime_dependencies": [
           {
@@ -1700,11 +1703,11 @@
           "getrandom"
         ]
       },
-      "terraform-forge-0.1.4-94a642c2666e4a68c2e0930621d5082a77b0ef81": {
+      "terraform-forge-0.1.6": {
         "runtime_dependencies": [
           {
             "name": "go_synthesizer",
-            "package_key": "go-synthesizer-0.1.1-763fcac1b04e829ecbe40f111c35d71b6f4232ce",
+            "package_key": "go-synthesizer-0.1.2",
             "kind": "normal",
             "features": [],
             "uses_default_features": true,
@@ -1714,7 +1717,7 @@
           },
           {
             "name": "iac_forge",
-            "package_key": "iac-forge-0.1.0-0974c20cf7d3c17b3f36ed53564b47ca3dd9ff32",
+            "package_key": "iac-forge-0.1.5",
             "kind": "normal",
             "features": [],
             "uses_default_features": true,
@@ -1736,7 +1739,7 @@
           },
           {
             "name": "meimei",
-            "package_key": "meimei-0.1.1-658313a9184e202b4df74b5595c0884104d67a84",
+            "package_key": "meimei-0.1.1",
             "kind": "normal",
             "features": [],
             "uses_default_features": true,
@@ -1746,7 +1749,7 @@
           },
           {
             "name": "openapi_forge",
-            "package_key": "openapi-forge-0.1.5-448187a3c429401e83bbe1acb21f2c3251075b3e",
+            "package_key": "openapi-forge-0.1.7",
             "kind": "normal",
             "features": [],
             "uses_default_features": true,
@@ -3155,7 +3158,7 @@
     }
   },
   "per_crate": {
-    "ansible-forge-0.1.3-e9632c545acfd854657cbc19905177143d791b6a": {
+    "ansible-forge-0.1.6": {
       "edition": "2024"
     },
     "anstream-1.0.0": {
@@ -3229,7 +3232,7 @@
     "cpufeatures-0.3.0": {
       "edition": "2024"
     },
-    "crossplane-forge-0.1.0-e8aef9c8b2aba3c270928fa1a7878c85a10d0522": {
+    "crossplane-forge-0.1.1": {
       "edition": "2024"
     },
     "equivalent-1.0.2": {
@@ -3251,7 +3254,7 @@
     "glob-0.3.3": {
       "edition": "2015"
     },
-    "go-synthesizer-0.1.1-763fcac1b04e829ecbe40f111c35d71b6f4232ce": {
+    "go-synthesizer-0.1.2": {
       "edition": "2024"
     },
     "hashbrown-0.17.1": {
@@ -3260,10 +3263,10 @@
     "heck-0.5.0": {
       "edition": "2021"
     },
-    "helm-forge-0.1.0-46888e3a673cfdf776718c4e6a4f400a1561fb70": {
+    "helm-forge-0.1.1": {
       "edition": "2024"
     },
-    "iac-forge-0.1.0-0974c20cf7d3c17b3f36ed53564b47ca3dd9ff32": {
+    "iac-forge-0.1.5": {
       "edition": "2024"
     },
     "iac-forge-cli-0.1.3": {
@@ -3294,7 +3297,7 @@
     "linux-raw-sys-0.12.1": {
       "edition": "2021"
     },
-    "meimei-0.1.1-658313a9184e202b4df74b5595c0884104d67a84": {
+    "meimei-0.1.1": {
       "edition": "2024"
     },
     "memchr-2.8.3": {
@@ -3307,14 +3310,17 @@
     "once_cell-1.21.4": {
       "edition": "2021"
     },
-    "openapi-forge-0.1.5-448187a3c429401e83bbe1acb21f2c3251075b3e": {
+    "openapi-forge-0.1.7": {
+      "edition": "2024"
+    },
+    "pleme-io-takumi-0.1.2": {
       "edition": "2024"
     },
     "proc-macro2-1.0.106": {
       "edition": "2021",
       "build_script": "build.rs"
     },
-    "pulumi-forge-0.1.5-7918de21c4d07fb70f21cba4d3edde611deba118": {
+    "pulumi-forge-0.1.7": {
       "edition": "2024"
     },
     "quote-1.0.46": {
@@ -3328,7 +3334,7 @@
     "ryu-1.0.23": {
       "edition": "2021"
     },
-    "sekkei-0.1.1-6a96f7e49c7ec5a6388e9a5f2a8f8a49be5fffb8": {
+    "sekkei-0.1.1": {
       "edition": "2024"
     },
     "serde-1.0.228": {
@@ -3356,7 +3362,7 @@
     "shlex-2.0.1": {
       "edition": "2018"
     },
-    "steampipe-forge-0.1.5-50e4caf0c75cac31eeae92e0392f4600c2339f21": {
+    "steampipe-forge-0.1.7": {
       "edition": "2024"
     },
     "strsim-0.11.1": {
@@ -3368,13 +3374,10 @@
     "synthesizer-core-0.1.1": {
       "edition": "2024"
     },
-    "takumi-0.1.1-f8c1a94f882041356a104aaef1b5ecb847cc7882": {
-      "edition": "2024"
-    },
     "tempfile-3.27.0": {
       "edition": "2021"
     },
-    "terraform-forge-0.1.4-94a642c2666e4a68c2e0930621d5082a77b0ef81": {
+    "terraform-forge-0.1.6": {
       "edition": "2024"
     },
     "thiserror-2.0.18": {
@@ -3424,19 +3427,6 @@
       "build_script": "build.rs"
     }
   },
-  "git_nar_sha256": {
-    "ansible-forge-0.1.3-e9632c545acfd854657cbc19905177143d791b6a": "sha256-TW6TcgVEUBzr8AOb/STxtsRZFQiWVndiQFY44B0Iccc=",
-    "crossplane-forge-0.1.0-e8aef9c8b2aba3c270928fa1a7878c85a10d0522": "sha256-B7GaemYH1U/CGO5NWcciO5FD83/c1AiRZ/Vr86MLkL4=",
-    "go-synthesizer-0.1.1-763fcac1b04e829ecbe40f111c35d71b6f4232ce": "sha256-4p8ZdcGdZco9QHF/0YIyWis/vEJnvQmKrNph4KMgXZc=",
-    "helm-forge-0.1.0-46888e3a673cfdf776718c4e6a4f400a1561fb70": "sha256-+AuFJA7x8sJvqx8uiD+AUZQoERcUAkowjrL0uAzT0/0=",
-    "iac-forge-0.1.0-0974c20cf7d3c17b3f36ed53564b47ca3dd9ff32": "sha256-47h2Z59b76y7LheE9ENqgc4vys5Xs3glLlsxCa51jAA=",
-    "meimei-0.1.1-658313a9184e202b4df74b5595c0884104d67a84": "sha256-RigKWzrNttgzEd7BUJvM0aXEgpyFcxYeFG4vJ4TbTlE=",
-    "openapi-forge-0.1.5-448187a3c429401e83bbe1acb21f2c3251075b3e": "sha256-P2j7WD+PX7ozXOn8xWucAbOXkpJuKzrbH0a31y2TUNA=",
-    "pulumi-forge-0.1.5-7918de21c4d07fb70f21cba4d3edde611deba118": "sha256-MRnACapyGvpfEABm58CgB1aXGtwPEzpZ4HPtszeMB8Q=",
-    "sekkei-0.1.1-6a96f7e49c7ec5a6388e9a5f2a8f8a49be5fffb8": "sha256-Sy4rMsYVTJb36CQ7gWsyx3Jj8+kyWDAvoVwhbNuBB7A=",
-    "steampipe-forge-0.1.5-50e4caf0c75cac31eeae92e0392f4600c2339f21": "sha256-GwwkwmvEvfdrpAUvM8VaSBCjGBlM3IHV/iRZYAj1BY4=",
-    "takumi-0.1.1-f8c1a94f882041356a104aaef1b5ecb847cc7882": "sha256-2lALxl7MuqHddmybQDi4zYsZVK4zmEW4Y0j+hc0+tVQ=",
-    "terraform-forge-0.1.4-94a642c2666e4a68c2e0930621d5082a77b0ef81": "sha256-TqmOa5pcNpX3pvQknPNUB1aKJOdDtZrYnTAeFwYJVg0="
-  },
+  "git_nar_sha256": {},
   "flake_metadata": {}
 }
